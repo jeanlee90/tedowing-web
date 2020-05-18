@@ -1,0 +1,14 @@
+{
+  "name": "development",
+  "version": "1.0.0",
+  "description": "Tedowing Web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hyunjin Lee",
+  "license": "ISC",
+  "dependencies": {
+    "prettier": "^2.0.5"
+  }
+}
