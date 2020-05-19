@@ -112,17 +112,14 @@ export const addMyVideo = async (req, res, next) => {
       return next(errorCodes["400"]);
     }
 
-    // 1) crawling (get talkId)
     const params = await getTedHtmlData(tedUrl);
     if (!params) return next(errorCodes["2000"]);
 
-    // 2) talkId 유무 검사
+    // talkId 유무 검사
     const { talkId } = params;
     let { videoId } = await db.talkIds.findOne({ where: { talkId } });
 
-    // 3) 없는 경우, 나머지 데이터 가져와서 videos, myVideos에 저장
     if (videoId === null) {
-      // 4) videos에 저장
       const videoUrl = getTedVideoUrl(params);
       if (isEmpty(videoUrl)) return next(errorCodes["2001"]);
 
@@ -131,6 +128,7 @@ export const addMyVideo = async (req, res, next) => {
       const langMap = compact(await getTedLanguages(params));
       if (isEmpty(langMap)) return next(errorCodes["2002"]);
 
+      // videoId 설정
       const createdVideo = await db.videos.create({
         talkId,
         timing,
@@ -139,7 +137,11 @@ export const addMyVideo = async (req, res, next) => {
       });
       videoId = createdVideo.videoId;
 
-      // 5) 언어별 table에 데이터 저장
+      const tags = getTedTags(params);
+      for (const tag of tags) await db.tags.create({ tag, videoId });
+      await db.talkIds.create({ talkId, videoId });
+
+      // 언어별 데이터 저장
       const langCodes = langMap.map(l => l.languageCode);
       await Promise.all(
         langCodes.map(langCode => {
@@ -148,20 +150,12 @@ export const addMyVideo = async (req, res, next) => {
           return db[tableName].create({ videoId, title, description, author, script });
         }),
       );
-
-      // 6) tags
-      const tags = getTedTags(params);
-      for (const tag of tags) await db.tags.create({ tag, videoId });
-
-      // 7) TalkIds에 Insert
-      await db.talkIds.create({ talkId, videoId });
     }
 
-    // 7) MyVideos에 Insert
+    // MyVideos에 Insert
     const { uid } = user;
     await db.myVideos.create({ uid, videoId });
 
-    // videoId, title, description, author, thumbnail, duration
     res.send(makeSuccessFormat());
   } catch (err) {
     next(err);
