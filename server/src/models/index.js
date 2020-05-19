@@ -1,10 +1,8 @@
-import fs from "fs";
 import path from "path";
 import Sequelize from "sequelize";
-import config from "../utils/config";
+import config from "../lib/variables/config";
 
 const db = {};
-const basename = path.basename(__filename);
 const { MYSQL_URL, MYSQL_USER, MYSQL_PASS, MYSQL_DATABASE } = config;
 const sequelize = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASS, {
   host: MYSQL_URL,
@@ -17,20 +15,20 @@ const sequelize = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASS, {
   },
 });
 
-fs.readdirSync(__dirname)
-  .filter(file => {
-    return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js";
-  })
-  .forEach(file => {
-    const model = sequelize["import"](path.join(__dirname, file));
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) db[modelName].associate(db);
-});
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+db.users = require("./users")(sequelize, Sequelize);
+db.googleOauths = require("./googleOauths")(sequelize, Sequelize);
+
+db.myVideos = require("./myVideos")(sequelize, Sequelize);
+db.videos = require("./videos")(sequelize, Sequelize);
+db.talkIds = require("./talkIds")(sequelize, Sequelize);
+db.tags = require("./tags")(sequelize, Sequelize);
+db.langKO = require("./langKO")(sequelize, Sequelize);
+db.langEN = require("./langEN")(sequelize, Sequelize);
+db.langZHCN = require("./langZHCN")(sequelize, Sequelize);
+db.langZHTW = require("./langZHTW")(sequelize, Sequelize);
+db.langJA = require("./langJA")(sequelize, Sequelize);
 
 export default db;

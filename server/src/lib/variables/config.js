@@ -11,12 +11,16 @@ const config = {
   GOOGLE_CLIENT_ID: "843902618877-dento56hlk67skcfpt12m25td7gbv3m6.apps.googleusercontent.com",
   GOOGLE_CLIENT_SECRET: "rHBJWe9HsXruIVgqdMPD58_k",
   GOOGLE_CALLBACK_URL: "http://localhost:4000/api/auth/google/callback",
-  GOOGLE_SCOPE:  [
+  GOOGLE_SCOPE: [
     "https://www.googleapis.com/auth/plus.login",
     "https://www.googleapis.com/auth/plus.me",
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
-  ]
+  ],
+  // CRAWLING
+  TED_URL: "https://www.ted.com/talks",
+  TED_URL_REGEX: /https?:\/\/(www\.)?ted.com\/talks/,
+  TED_VIDEO_PREFIX: "https://download.ted.com/talks",
 };
 
 export default config;

@@ -3,9 +3,10 @@ import passport from "passport";
 import session from "express-session";
 import models from "./models";
 import route from "./routes/index";
-import config from "./utils/config";
+import config from "./lib/variables/config";
 import setupPassport from "./middlewares/passport";
 import { defaultErrorHandler } from "./middlewares/ErrorHandler";
+import logger from "./lib/utils/logger";
 
 const app = express();
 const port = config.PORT || 4000;
@@ -23,5 +24,5 @@ app.use(defaultErrorHandler);
 models.sequelize.sync();
 
 app.listen(port, () => {
-  console.log(`express is running on ${port}`);
+  logger.info(`express is running on ${port}`);
 });

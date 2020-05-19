@@ -1,5 +1,3 @@
-import express from "express";
-
 export const makeSuccessFormat = result => {
   return {
     success: true,

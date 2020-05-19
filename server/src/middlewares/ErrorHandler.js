@@ -1,7 +1,7 @@
 import util from "util";
-import logger from "../utils/logger";
-import errorCodes from "../utils/errorCodes";
-import { makeFailureFormat } from "../utils/makeRespFormat";
+import logger from "../lib/utils/logger";
+import errorCodes from "../lib/variables/errorCodes";
+import { makeFailureFormat } from "../lib/utils/makeRespFormat";
 
 export const defaultErrorHandler = async (err, req, res, next) => {
   logger.error(util.inspect(err));

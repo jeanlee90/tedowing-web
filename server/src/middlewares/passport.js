@@ -1,7 +1,7 @@
 import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
 import { onLoginSuccess } from "../routes/users";
 import isEmpty from "lodash/isEmpty";
-import config from "../utils/config";
+import config from "../lib/variables/config";
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = config;
 
