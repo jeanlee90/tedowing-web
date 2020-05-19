@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
+    "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "lodash": "^4.17.15",

@@ -9,6 +9,7 @@
   "author": "Hyunjin Lee",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "prettier": "^2.0.5"
   }
 }

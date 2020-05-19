@@ -1,12 +1,16 @@
+import compact from "lodash/compact";
+import isEmpty from "lodash/isEmpty";
 import db from "../models";
-import logger from "../utils/logger";
-import errorCodes from "../utils/errorCodes";
-import { makeSuccessFormat } from "../utils/makeRespFormat";
+import logger from "../lib/utils/logger";
+import config from "../lib/variables/config";
+import errorCodes from "../lib/variables/errorCodes";
+import { makeSuccessFormat } from "../lib/utils/makeRespFormat";
+import { getTedHtmlData, getTedLanguages, getTedVideoUrl, getTedMetaData, getTedTags, getTedTiming } from "../lib/utils/ted";
 
 /**
  * [GET] 내 비디오 리스트 가져오기
  *
- * [Response]
+ * 1) Response
  * - list: [object]
  *    - videoId
  *    - title
@@ -15,56 +19,45 @@ import { makeSuccessFormat } from "../utils/makeRespFormat";
  *    - duration
  */
 export const getMyVideos = async (req, res, next) => {
-  logger.info("getMyVideos - Request");
-
-  db.myVideos
-    .findAll()
-    .then(list => {
+  try {
+    logger.info("getMyVideos - Request");
+    const list = await db.myVideos.findAll();
+    if (list !== null) {
       logger.info("getMyVideos - Success");
       res.send(makeSuccessFormat({ list }));
-    })
-    .catch(err => {
-      logger.error("getMyVideos - Fail : " + err);
-      next(err);
-    });
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 /**
- * [POST] 내 비디오 리스트 Video 추가
- * 받아올 데이터: url -> 일단 크롤링. -> videoId -> videoId로 DB에 있는지 검사. -> 없으면 더 크롤링 -> DB에 저장.
+ * [PUT] Favorite 상태 수정
  *
- * [Request]
- * - url: (string) TED video url
+ * 1) Request
+ * - isFavorite: (boolean)
  *
- * [Response]
- * - videoId
- * - title
- * - author
- * - thumbnail
- * - duration
+ * 2) Response
+ * - success
  */
-export const addMyVideo = async (req, res, next) => {
-  logger.info("addMyVideo - Request");
-
-  const { uid, videoId } = req.body;
-  if (!uid || !videoId) {
-    logger.error("addMyVideo - Fail");
-    return next(errorCodes["400"]);
-  }
-
-  db.myVideos
-    .create({
-      uid,
-      videoId,
-    })
-    .then(result => {
-      logger.info("addMyVideo - Success");
-      res.send(makeSuccessFormat(result));
-    })
-    .catch(err => {
+export const editFavoriteStatus = async (req, res, next) => {
+  try {
+    logger.info("editFavoriteStatus - Request");
+    const { user, videoId, isFavorite } = req.body;
+    if (!videoId || typeof isFavorite !== "boolean") {
       logger.error("addMyVideo - Fail");
-      next(err);
-    });
+      return next(errorCodes["400"]);
+    }
+
+    const { uid } = user;
+    const isUpdated = db.myVideos.update({ isFavorite }, { where: { uid, videoId } });
+    if (isUpdated) {
+      logger.info("editFavoriteStatus - Success");
+      res.send(makeSuccessFormat());
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 /**
@@ -76,8 +69,101 @@ export const addMyVideo = async (req, res, next) => {
  * [Response]
  * - success만 보내기
  */
-export const deleteMyVideo = async (req, res, next) => {
-  logger.info("deleteMyVideo - Request");
+export const deleteMyVideo = (req, res, next) => {
+  try {
+    logger.info("deleteMyVideo - Request");
+    const { user, videoId } = req.body;
+    if (!videoId) {
+      logger.error("addMyVideo - Fail");
+      return next(errorCodes["400"]);
+    }
 
-  res.send(makeSuccessFormat());
+    const { uid } = user;
+    const isDeleted = db.myVideos.destroy({ where: { uid, videoId } });
+    if (isDeleted) {
+      logger.info("deleteMyVideo - Success");
+      res.send(makeSuccessFormat());
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * [POST] 내 비디오 리스트 Video 추가
+ * 받아올 데이터: url -> 일단 크롤링. -> talkId -> talkId DB에 있는지 검사. -> 없으면 더 크롤링 -> DB에 저장.
+ *
+ * 1) Request
+ * - tedUrl: (string) TED video url
+ *
+ * 2) Response
+ * - videoId
+ * - title
+ * - author
+ * - thumbnail
+ * - duration
+ */
+export const addMyVideo = async (req, res, next) => {
+  try {
+    logger.info("addMyVideo - Request");
+    const { user, tedUrl } = req.body;
+    if (!tedUrl && !config.TED_URL.test(tedUrl)) {
+      logger.error("addMyVideo - Fail");
+      return next(errorCodes["400"]);
+    }
+
+    // 1) crawling (get talkId)
+    const params = await getTedHtmlData(tedUrl);
+    if (!params) return next(errorCodes["2000"]);
+
+    // 2) talkId 유무 검사
+    const { talkId } = params;
+    let { videoId } = await db.talkIds.findOne({ where: { talkId } });
+
+    // 3) 없는 경우, 나머지 데이터 가져와서 videos, myVideos에 저장
+    if (videoId === null) {
+      // 4) videos에 저장
+      const videoUrl = getTedVideoUrl(params);
+      if (isEmpty(videoUrl)) return next(errorCodes["2001"]);
+
+      const metaData = getTedMetaData(params);
+      const timing = await getTedTiming(params);
+      const langMap = compact(await getTedLanguages(params));
+      if (isEmpty(langMap)) return next(errorCodes["2002"]);
+
+      const createdVideo = await db.videos.create({
+        talkId,
+        timing,
+        ...videoUrl,
+        ...metaData,
+      });
+      videoId = createdVideo.videoId;
+
+      // 5) 언어별 table에 데이터 저장
+      const langCodes = langMap.map(l => l.languageCode);
+      await Promise.all(
+        langCodes.map(langCode => {
+          const tableName = `lang${langCode.replace("-", "").toUpperCase()}`;
+          const { title, description, author, script } = langMap.find(l => l.languageCode === langCode);
+          return db[tableName].create({ videoId, title, description, author, script });
+        }),
+      );
+
+      // 6) tags
+      const tags = getTedTags(params);
+      for (const tag of tags) await db.tags.create({ tag, videoId });
+
+      // 7) TalkIds에 Insert
+      await db.talkIds.create({ talkId, videoId });
+    }
+
+    // 7) MyVideos에 Insert
+    const { uid } = user;
+    await db.myVideos.create({ uid, videoId });
+
+    // videoId, title, description, author, thumbnail, duration
+    res.send(makeSuccessFormat());
+  } catch (err) {
+    next(err);
+  }
 };

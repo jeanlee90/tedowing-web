@@ -1,7 +1,10 @@
 import passport from "passport";
 import db from "../models";
-import config from "../utils/config";
-import logger from "../utils/logger";
+import config from "../lib/variables/config";
+import logger from "../lib/utils/logger";
+import errorCodes from "../lib/variables/errorCodes";
+import languageCodes from "../lib/variables/_langCodes";
+import { makeSuccessFormat } from "../lib/utils/makeRespFormat";
 
 const { GOOGLE_SCOPE } = config;
 
@@ -21,5 +24,33 @@ export const onLoginSuccess = async (profile, done) => {
     return done(null, createdUser);
   } catch (err) {
     logger.error(err);
+  }
+};
+
+/**
+ * [PUT] 언어 설정
+ * 1) Request
+ * - language: (string) 언어코드
+ *
+ * 2) Response
+ * - success
+ */
+export const editLanguage = async (req, res, next) => {
+  try {
+    logger.info("editFavoriteStatus - Request");
+    const { user, language } = req.body;
+    if (!language || !languageCodes[language]) {
+      logger.error("addMyVideo - Fail");
+      return next(errorCodes["400"]);
+    }
+
+    const { uid } = user;
+    const isUpdated = await db.users.update({ language }, { where: { uid } });
+    if (isUpdated) {
+      logger.info("editFavoriteStatus - Success");
+      res.send(makeSuccessFormat());
+    }
+  } catch (err) {
+    next(err);
   }
 };
