@@ -108,7 +108,6 @@ export const addMyVideo = async (req, res, next) => {
     logger.info("addMyVideo - Request");
     const { user, tedUrl } = req.body;
     if (!tedUrl && !config.TED_URL.test(tedUrl)) {
-      logger.error("addMyVideo - Fail");
       return next(errorCodes["400"]);
     }
 
@@ -117,9 +116,10 @@ export const addMyVideo = async (req, res, next) => {
 
     // talkId 유무 검사
     const { talkId } = params;
-    let { videoId } = await db.talkIds.findOne({ where: { talkId } });
+    let { videoId } = (await db.talkIds.findOne({ where: { talkId } })) || {};
+    logger.info(`addMyVideo - check videoId = ${videoId}`);
 
-    if (videoId === null) {
+    if (!videoId) {
       const videoUrl = getTedVideoUrl(params);
       if (isEmpty(videoUrl)) return next(errorCodes["2001"]);
 
@@ -136,10 +136,12 @@ export const addMyVideo = async (req, res, next) => {
         ...metaData,
       });
       videoId = createdVideo.videoId;
+      logger.info(`addMyVideo - add video = ${videoId}`);
 
       const tags = getTedTags(params);
       for (const tag of tags) await db.tags.create({ tag, videoId });
       await db.talkIds.create({ talkId, videoId });
+      logger.info("addMyVideo - add tags, talkIds");
 
       // 언어별 데이터 저장
       const langCodes = langMap.map(l => l.languageCode);
@@ -148,6 +150,7 @@ export const addMyVideo = async (req, res, next) => {
           const tableName = `lang${langCode.replace("-", "").toUpperCase()}`;
           const { title, description, author, script } = langMap.find(l => l.languageCode === langCode);
           return db[tableName].create({ videoId, title, description, author, script });
+          logger.info(`addMyVideo - add lang = ${langCode}`);
         }),
       );
     }
@@ -155,6 +158,8 @@ export const addMyVideo = async (req, res, next) => {
     // MyVideos에 Insert
     const { uid } = user;
     await db.myVideos.create({ uid, videoId });
+    logger.info("addMyVideo - create my video");
+    logger.info("addMyVideo - Success");
 
     res.send(makeSuccessFormat());
   } catch (err) {

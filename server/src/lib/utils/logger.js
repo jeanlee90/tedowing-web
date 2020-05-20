@@ -1,6 +1,6 @@
 import winston from "winston";
 
-const { combine, timestamp, label, printf } = winston.format;
+const { combine, timestamp, label, printf, colorize } = winston.format;
 
 const myFormat = printf(({ level, message, label, timestamp }) => {
   return `${timestamp} [${label}] ${level}: ${message}`;
@@ -11,8 +11,7 @@ const options = {
     level: "debug",
     handleExceptions: true,
     json: false,
-    colorize: true,
-    format: combine(label({ label: "express_server" }), timestamp(), myFormat),
+    format: combine(label({ label: "express_server" }), timestamp(), colorize(), myFormat),
   },
 };
 

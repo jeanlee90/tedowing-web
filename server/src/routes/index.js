@@ -10,9 +10,12 @@ router.route("/videos/main").get(function (req, res) {
   res.send(`Main - isLogin ? ${req.isAuthenticated()} ${JSON.stringify(req.user)} ${req.user?.uid}`);
 });
 
-// auth/user
+// auth
 router.route("/auth/google").get([checkAlreadyLoggedIn, UserRouter.requestLoginByGoogle()]);
 router.route("/auth/google/callback").get(UserRouter.loginByGoogle());
+router.route("/auth/logout").get(UserRouter.logout);
+
+// user
 router.route("/users/:uid").put([authenticateUser, UserRouter.editLanguage]);
 
 // myVideos
