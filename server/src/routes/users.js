@@ -34,6 +34,31 @@ export const logout = (req, res) => {
 };
 
 /**
+ * [GET] 로그인 정보 가져오기
+ * 1) Request
+ * - language: (string) 언어코드
+ *
+ * 2) Response
+ * - success
+ */
+export const getMyLoginInformation = async (req, res, next) => {
+  try {
+    logger.info("getMyLoginInformation");
+
+    const isLoggedIn = req.isAuthenticated();
+    const result = { isLoggedIn, info: {} };
+    if (isLoggedIn) {
+      const { uid, email, language } = req.user || {};
+      result.info = { uid, email, language };
+    }
+
+    res.send(makeSuccessFormat(result));
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
  * [PUT] 언어 설정
  * 1) Request
  * - language: (string) 언어코드
@@ -43,17 +68,16 @@ export const logout = (req, res) => {
  */
 export const editLanguage = async (req, res, next) => {
   try {
-    logger.info("editFavoriteStatus - Request");
-    const { user, language } = req.body;
+    logger.info("editLanguage - Request");
+    const { language } = req.body;
     if (!language || !languageCodes[language]) {
-      logger.error("addMyVideo - Fail");
       return next(errorCodes["400"]);
     }
 
-    const { uid } = user;
+    const { uid } = req.user;
     const isUpdated = await db.users.update({ language }, { where: { uid } });
     if (isUpdated) {
-      logger.info("editFavoriteStatus - Success");
+      logger.info("editLanguage - Success");
       res.send(makeSuccessFormat());
     }
   } catch (err) {

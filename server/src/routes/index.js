@@ -3,8 +3,8 @@ import * as UserRouter from "./users";
 import * as MyVideoRouter from "./myVideos";
 
 const router = express.Router();
-const checkAlreadyLoggedIn = (req, res, next) => (!req.isAuthenticated() ? next() : res.status(301).redirect("/api/videos/my"));
 const authenticateUser = (req, res, next) => (req.isAuthenticated() ? next() : res.status(301).redirect("/"));
+const checkAlreadyLoggedIn = (req, res, next) => (!req.isAuthenticated() ? next() : res.status(301).redirect("/api/videos/my"));
 
 router.route("/videos/main").get(function (req, res) {
   res.send(`Main - isLogin ? ${req.isAuthenticated()} ${JSON.stringify(req.user)} ${req.user?.uid}`);
@@ -16,7 +16,7 @@ router.route("/auth/google/callback").get(UserRouter.loginByGoogle());
 router.route("/auth/logout").get(UserRouter.logout);
 
 // user
-router.route("/users/:uid").put([authenticateUser, UserRouter.editLanguage]);
+router.route("/users/my").get(UserRouter.getMyLoginInformation).put([authenticateUser, UserRouter.editLanguage]);
 
 // myVideos
 router

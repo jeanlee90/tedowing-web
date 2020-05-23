@@ -43,13 +43,12 @@ export const getMyVideos = async (req, res, next) => {
 export const editFavoriteStatus = async (req, res, next) => {
   try {
     logger.info("editFavoriteStatus - Request");
-    const { user, videoId, isFavorite } = req.body;
+    const { videoId, isFavorite } = req.body;
     if (!videoId || typeof isFavorite !== "boolean") {
-      logger.error("addMyVideo - Fail");
       return next(errorCodes["400"]);
     }
 
-    const { uid } = user;
+    const { uid } = req.user;
     const isUpdated = db.myVideos.update({ isFavorite }, { where: { uid, videoId } });
     if (isUpdated) {
       logger.info("editFavoriteStatus - Success");
@@ -72,13 +71,12 @@ export const editFavoriteStatus = async (req, res, next) => {
 export const deleteMyVideo = (req, res, next) => {
   try {
     logger.info("deleteMyVideo - Request");
-    const { user, videoId } = req.body;
+    const { videoId } = req.body;
     if (!videoId) {
-      logger.error("addMyVideo - Fail");
       return next(errorCodes["400"]);
     }
 
-    const { uid } = user;
+    const { uid } = req.user;
     const isDeleted = db.myVideos.destroy({ where: { uid, videoId } });
     if (isDeleted) {
       logger.info("deleteMyVideo - Success");
@@ -106,7 +104,7 @@ export const deleteMyVideo = (req, res, next) => {
 export const addMyVideo = async (req, res, next) => {
   try {
     logger.info("addMyVideo - Request");
-    const { user, tedUrl } = req.body;
+    const { tedUrl } = req.body;
     if (!tedUrl && !config.TED_URL.test(tedUrl)) {
       return next(errorCodes["400"]);
     }
@@ -156,9 +154,8 @@ export const addMyVideo = async (req, res, next) => {
     }
 
     // MyVideos에 Insert
-    const { uid } = user;
+    const { uid } = req.user;
     await db.myVideos.create({ uid, videoId });
-    logger.info("addMyVideo - create my video");
     logger.info("addMyVideo - Success");
 
     res.send(makeSuccessFormat());
