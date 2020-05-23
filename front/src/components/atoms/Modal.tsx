@@ -7,7 +7,7 @@ import useKeyPress from "lib/hooks/useKeyPress";
 
 interface TProps {
   visible: boolean;
-  title?: string;
+  title?: string | React.ReactNode;
   className?: string;
   closable?: boolean; // close 버튼 유무
   keyboard?: boolean; // Escape 버튼 클릭 시 닫기
@@ -45,7 +45,7 @@ function Modal({ className, visible, title, closable, children, keyboard, maskCl
     <Portal elementId="modal-root">
       <ModalWrapper className={className} tabIndex={-1} visible={visible}>
         <ModalInner tabIndex={0} className="modal-inner" ref={ref}>
-          {title && <Title level={2}>{title}</Title>}
+          <ModalTitle>{title && <Title level={4}>{title}</Title>}</ModalTitle>
           {closable && <CloseButton className="modal-close" onClick={handleClose} />}
           <ModalContent>{children}</ModalContent>
         </ModalInner>
@@ -102,8 +102,15 @@ const ModalInner = styled.div`
   outline: 0;
 
   // size
-  width: 360px;
+  width: 90%;
   max-width: 480px;
+  ${({ theme }) => theme.media.desktop(`width: 360px;`)}
+`;
+
+const ModalTitle = styled.div`
+  min-height: 40px;
+  display: flex;
+  align-items: center;
 `;
 
 const CloseButton = styled.span.attrs(() => ({ role: "button" }))`
@@ -136,7 +143,7 @@ const CloseButton = styled.span.attrs(() => ({ role: "button" }))`
 `;
 
 const ModalContent = styled.div`
-  padding: 16px 0;
+  padding: 32px 0 16px 0;
 `;
 
 export default Modal;

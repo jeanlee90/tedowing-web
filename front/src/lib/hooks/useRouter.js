@@ -23,3 +23,5 @@ export function useRouter() {
     };
   }, [params, match, location, history]);
 }
+
+export default useRouter;

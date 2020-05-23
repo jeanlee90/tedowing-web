@@ -31,6 +31,7 @@ const SButton = styled.div.attrs(() => ({ role: "button" }))`
   padding: 12px 14px;
   background-color: ${({ theme }: TStyled) => theme.colors.white};
   border-radius: 3px;
+  border: 1px solid #f1f1f1;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.25s ease 0s;
 

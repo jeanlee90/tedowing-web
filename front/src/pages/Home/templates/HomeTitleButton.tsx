@@ -1,26 +1,53 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styles/theme-components";
 import Logo from "components/atoms/Logo";
-import Button, { Sizes } from "components/atoms/Button";
 import * as routes from "lib/variables/routes";
+import Modal from "components/atoms/Modal";
+import { baseUrl } from "lib/variables/settings";
+import Button, { Sizes } from "components/atoms/Button";
+import SocialButton, { Sns } from "components/atoms/SocialButton";
 
 interface TProps {
   isLoggedIn: boolean;
 }
 
 function HomeTitleButton({ isLoggedIn }: TProps) {
+  const [visible, setVisible] = useState(false);
+  const history = useHistory();
+  const handleClick = () => {
+    if (isLoggedIn) return history.push(routes.MY_VIDEOS.path);
+    setVisible(true);
+  };
+  const handleClose = () => {
+    setVisible(false);
+  };
+
   return (
     <HomeTBWrapper>
       <HomeTitle>
         <HomeTitleSub>Learn English with TED talks</HomeTitleSub>
         <Logo inverted />
       </HomeTitle>
-      <Link to={isLoggedIn ? "/test" : routes.MY_VIDEOS.path}>
-        <Button primary size={Sizes.large}>
-          Create a FREE account
-        </Button>
-      </Link>
+      <Button primary size={Sizes.large} onClick={handleClick}>
+        Create a FREE account
+      </Button>
+
+      <Modal
+        visible={visible}
+        title={
+          <div>
+            Create your
+            <br />
+            Tedowing account
+          </div>
+        }
+        onClose={handleClose}
+      >
+        <a href={`${baseUrl}/api/auth/google`}>
+          <SocialButton sns={Sns.google} />
+        </a>
+      </Modal>
     </HomeTBWrapper>
   );
 }

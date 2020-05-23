@@ -31,7 +31,7 @@ function Title({ level, children, ...rest }: TProps) {
 
 const STitle = styled.div`
   font-size: ${({ theme }: TStyled) => theme.fontSizes.title};
-  line-height: 1.5;
+  line-height: ${({ level }: TStyled) => (level && level < 3 ? 1.5 : 1.4)};
 
   // type
   color: ${({ type, mark, theme }: TStyled) => {
