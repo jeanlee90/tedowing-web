@@ -12,7 +12,12 @@ import logger from "./lib/utils/logger";
 const app = express();
 const port = config.PORT || 4000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  }),
+);
 
 app.use(session({ secret: "SECRET_CODE", resave: true, saveUninitialized: false }));
 app.use(passport.initialize()); // passport 구동

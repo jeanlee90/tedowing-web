@@ -4,7 +4,7 @@ import * as MyVideoRouter from "./myVideos";
 
 const router = express.Router();
 const authenticateUser = (req, res, next) => (req.isAuthenticated() ? next() : res.status(301).redirect("/"));
-const checkAlreadyLoggedIn = (req, res, next) => (!req.isAuthenticated() ? next() : res.status(301).redirect("/api/videos/my"));
+const checkAlreadyLoggedIn = (req, res, next) => (!req.isAuthenticated() ? next() : res.status(301).redirect("/videos/my"));
 
 router.route("/videos/main").get(function (req, res) {
   res.send(`Main - isLogin ? ${req.isAuthenticated()} ${JSON.stringify(req.user)} ${req.user?.uid}`);
