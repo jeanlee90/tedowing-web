@@ -75,6 +75,8 @@ const Layout = styled.div`
 
 const Content = styled.div`
   padding: 24px;
+  margin-top: ${({ theme }) => theme.layoutSizes.header};
+  margin-left: ${({ theme }) => theme.layoutSizes.pcNavigation};
 `;
 
 export default observer(AppContainer);

@@ -9,8 +9,13 @@ import { getTedHtmlData, getTedLanguages, getTedVideoUrl, getTedMetaData, getTed
 
 /**
  * [GET] 내 비디오 리스트 가져오기
+ * 1) Request
+ * - page: number(default = 1)
  *
- * 1) Response
+ * 2) Response
+ * - totalCount: number
+ * - totalPage: number
+ * - currentPage: number
  * - list: [object]
  *    - videoId
  *    - title
@@ -21,10 +26,34 @@ import { getTedHtmlData, getTedLanguages, getTedVideoUrl, getTedMetaData, getTed
 export const getMyVideos = async (req, res, next) => {
   try {
     logger.info("getMyVideos - Request");
-    const list = await db.myVideos.findAll();
-    if (list !== null) {
+    const { page = 1 } = req.body;
+    const { uid, language } = req.user || {};
+
+    const totalCount = await db.myVideos.count({ where: { uid } });
+    const myVideoIds = await db.myVideos.findAll({
+      where: { uid },
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (myVideoIds !== null) {
       logger.info("getMyVideos - Success");
-      res.send(makeSuccessFormat({ list }));
+
+      const list = await Promise.all(
+        myVideoIds.map(async ({ videoId, isFavorite }) => {
+          const { thumbnail, duration } = await db.videos.findOne({ where: { videoId } });
+          const { title, author } = await db[`lang${language.toUpperCase()}`].findOne({ where: { videoId } });
+
+          return { videoId, thumbnail, title, author, isFavorite, duration };
+        }),
+      );
+
+      res.send(
+        makeSuccessFormat({
+          list,
+          totalCount,
+          currentPage: page,
+        }),
+      );
     }
   } catch (err) {
     next(err);

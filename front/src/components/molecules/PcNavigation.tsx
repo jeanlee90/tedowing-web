@@ -30,7 +30,7 @@ function PcNavigation({ menu }: TProps) {
 
 const Sider = styled.div`
   padding: 24px;
-  width: 235px;
+  width: ${({ theme }) => theme.layoutSizes.pcNavigation};
   position: fixed;
   left: 0;
   bottom: 0;

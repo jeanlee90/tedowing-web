@@ -1,1 +1,1 @@
-export { default } from "./MyVideos";
+export { default } from "./MyVideosContainer";

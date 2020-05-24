@@ -89,6 +89,7 @@ const fontSizes = {
 
 const layoutSizes = {
   header: "54px",
+  pcNavigation: "235px",
 };
 
 const theme = {

@@ -18,8 +18,8 @@ export function loginStore() {
     isLoggedIn: false,
     userInfo: {} as TUserInfo,
     async checkLogin(): Promise<boolean> {
-      const { result } = (await request({ url: setAPIUrl("/users/my"), method: "GET" })) || {};
-      const { isLoggedIn } = result || {};
+      const { result = {} } = (await request({ url: setAPIUrl("/users/my"), method: "GET" })) || {};
+      const { isLoggedIn } = result as TCheckLoginAPI;
       if (result) {
         this.isLoggedIn = isLoggedIn;
         this.userInfo = result.info;
@@ -32,7 +32,7 @@ export function loginStore() {
       return success;
     },
     getUserInfo(): TUserInfo {
-      return toJS(this.userInfo);
+      return toJS(this.userInfo) || {};
     },
   };
 }

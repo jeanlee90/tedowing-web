@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { styled, ThemedProps } from "styles/theme";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export enum Sizes {
   large = "large",
@@ -17,7 +16,7 @@ interface TProps {
   disabled?: boolean;
   circle?: boolean;
   loading?: boolean;
-  icon?: IconProp;
+  icon?: React.ReactNode;
   onClick?: () => void;
   className?: string;
   children: React.ReactNode;
@@ -27,7 +26,7 @@ type TStyled = ThemedProps<TProps>;
 
 function SIcon({ children, ...props }: TProps) {
   let fIcon;
-  if (props.icon) fIcon = <FontAwesomeIcon icon={props.icon} />;
+  if (props.icon) fIcon = props.icon;
   else if (props.loading) fIcon = <FontAwesomeIcon icon={faSpinner} spin />;
 
   return (

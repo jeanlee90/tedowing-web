@@ -21,6 +21,8 @@ const config = {
   TED_URL: "https://www.ted.com/talks",
   TED_URL_REGEX: /https?:\/\/(www\.)?ted.com\/talks/,
   TED_VIDEO_PREFIX: "https://download.ted.com/talks",
+  // PAGINATION
+  PAGINATION_PER_PAGE: 18,
 };
 
 export default config;
