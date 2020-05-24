@@ -17,5 +17,6 @@ export const HOME: TRoute = {
 export const MY_VIDEOS: TRoute = {
   path: "/videos/my",
   exact: true,
+  authority: true,
   component: pages.MyVideos,
 };

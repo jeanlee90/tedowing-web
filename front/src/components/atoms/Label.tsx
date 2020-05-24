@@ -22,13 +22,19 @@ interface TProps {
   type?: Types;
   size?: Sizes;
   layout: Layouts;
+  icon?: React.ReactNode;
   children: React.ReactNode;
 }
 
 type TStyled = ThemedProps<TProps>;
 
-function Label({ children, ...rest }: TProps) {
-  return <SLabel {...rest}>{children}</SLabel>;
+function Label({ children, icon, ...rest }: TProps) {
+  return (
+    <SLabel {...rest}>
+      {icon && <SLabelIcon {...rest}>{icon}</SLabelIcon>}
+      {children}
+    </SLabel>
+  );
 }
 
 Label.defaultProps = {
@@ -67,6 +73,13 @@ const SLabel = styled.div`
     if (size == Sizes.small) return "3px 6px";
     return "4px 6px";
   }};
+
+  text-align: ${({ layout }: TStyled) => (layout === Layouts.vertical ? "center;" : "left")};
+`;
+
+const SLabelIcon = styled.div`
+  display: ${({ layout }: TStyled) => (layout === Layouts.vertical ? "block;" : "inline-block")};
+  margin-right: 8px;
 `;
 
 export default Label;

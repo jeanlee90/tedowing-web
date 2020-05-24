@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styles/theme-components";
 import useOnClickOutside from "lib/hooks/useOnClickOutside";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,9 +34,22 @@ function Dropdown({ title, options }: TProps) {
       </DropdownTitle>
       {open && (
         <DropdownOptions>
-          {options.map(o => (
-            <DropdownOption>{o.text}</DropdownOption>
-          ))}
+          {options.map(o => {
+            if (o.link)
+              return (
+                <Link to={o.link} key={o.text}>
+                  <DropdownOption>{o.text}</DropdownOption>
+                </Link>
+              );
+            else if (o.onClick)
+              return (
+                <DropdownOption key={o.text} onClick={o.onClick}>
+                  {o.text}
+                </DropdownOption>
+              );
+
+            return <DropdownOption key={o.text}>{o.text}</DropdownOption>;
+          })}
         </DropdownOptions>
       )}
     </DropdownWrapper>
@@ -54,7 +68,7 @@ const DropdownTitle = styled.div`
   color: ${({ theme }) => theme.colors.success};
 
   &:hover {
-    font-weight: 700;
+    text-decoration: underline;
   }
 `;
 
@@ -65,7 +79,9 @@ const DropdownAngle = styled.div`
 
 const DropdownOptions = styled.ul`
   overflow: hidden;
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
   text-align: left;
   padding: 4px 0;
   margin-top: 7px;

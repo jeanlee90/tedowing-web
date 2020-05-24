@@ -11,7 +11,7 @@ async function request(option: AxiosRequestConfig): Promise<DataFormat> {
   if (!option.url) return;
 
   try {
-    const response = await axios(option);
+    const response = await axios({ ...option, withCredentials: true });
     return response.data;
   } catch (e) {
     if (e.response) {

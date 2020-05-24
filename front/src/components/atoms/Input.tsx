@@ -7,8 +7,6 @@ interface TProps {
   circle?: boolean;
 }
 
-type TStyled = ThemedProps<TProps>;
-
 function Input(props: TProps) {
   return <SInput {...props} />;
 }
@@ -16,19 +14,19 @@ function Input(props: TProps) {
 const SInput = styled.input`
   box-sizing: border-box;
   width: 100%;
-  font-size: ${({ theme }: TStyled) => theme.fontSizes.text};
-  border: ${({ theme }: TStyled) => `1px solid ${theme.colors.border}`};
+  font-size: ${({ theme }) => theme.fontSizes.text};
+  border: 1px solid ${({ theme }) => `${theme.colors.border}`};
 
   &::placeholder {
-    color: ${({ theme }: TStyled) => theme.colors.disabled};
+    color: ${({ theme }) => theme.colors.disabled};
   }
   &:placeholder-shown {
     text-overflow: ellipsis;
   }
 
   // circle
-  border-radius: ${({ circle }: TStyled) => (circle ? "30px" : 0)};
-  padding: ${({ circle }: TStyled) => (circle ? "6px 14px" : "6px 12px")};
+  border-radius: ${({ circle }: TProps) => (circle ? "30px" : 0)};
+  padding: ${({ circle }: TProps) => (circle ? "6px 14px" : "6px 12px")};
 `;
 
 Input.defaultProps = {

@@ -68,8 +68,8 @@ const colors = {
   secondaryText: "#666",
   disabled: "#bfbfbf",
 
-  border: "#d9d9d9",
-  background: "#f5f5f5",
+  border: "#e0e0e0",
+  background: "#f0f0f0",
 
   google: "#ea4335",
   facebook: "#3b5998",
@@ -87,10 +87,15 @@ const fontSizes = {
   smaller: "10px",
 };
 
+const layoutSizes = {
+  header: "54px",
+};
+
 const theme = {
   media,
   colors,
   fontSizes,
+  layoutSizes,
 };
 
 export type Theme = typeof theme;

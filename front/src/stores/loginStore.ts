@@ -18,11 +18,11 @@ export function loginStore() {
     isLoggedIn: false,
     userInfo: {} as TUserInfo,
     async checkLogin(): Promise<boolean> {
-      const { result } = await request({ url: setAPIUrl("/users/my"), method: "GET" });
+      const { result } = (await request({ url: setAPIUrl("/users/my"), method: "GET" })) || {};
       const { isLoggedIn } = result || {};
       if (result) {
         this.isLoggedIn = isLoggedIn;
-        this.userInfo = result;
+        this.userInfo = result.info;
       }
 
       return isLoggedIn;

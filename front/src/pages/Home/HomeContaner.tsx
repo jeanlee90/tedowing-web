@@ -1,5 +1,6 @@
 import React from "react";
 import { useStore } from "stores";
+import { observer } from "mobx-react-lite";
 import styled from "styles/theme-components";
 import HomeBackground from "./templates/HomeBackground";
 import HomeTitleButton from "./templates/HomeTitleButton";
@@ -21,4 +22,4 @@ const SHome = styled.div`
   position: relative;
 `;
 
-export default HomeContainer;
+export default observer(HomeContainer);
