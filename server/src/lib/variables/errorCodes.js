@@ -10,6 +10,7 @@ const errorCodes = {
   2000: { statusCode: 400, code: 2000, message: "찾을 수 없는 테드 동영상입니다." },
   2001: { statusCode: 400, code: 2001, message: "동영상 CDN url을 찾을 수 없습니다." },
   2002: { statusCode: 400, code: 2002, message: "지원하는 언어가 없습니다." },
+  2003: { statusCode: 404, code: 2002, message: "존재하지 않는 영상입니다." },
 };
 
 export default errorCodes;

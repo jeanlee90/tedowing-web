@@ -1,7 +1,7 @@
 import request from "lib/utils/request";
 import { toJS } from "mobx";
 
-export interface TVideo {
+export interface TMyVideo {
   videoId: number;
   thumbnail: string;
   title: string;
@@ -10,18 +10,18 @@ export interface TVideo {
   duration: string;
 }
 
-interface TVideoList {
+interface TMyVideoList {
   totalCount: number;
   totalPage: number;
   currentPage: number;
-  list: TVideo[];
+  list: TMyVideo[];
 }
 
 export default function myVideosStore() {
   return {
     loading: true,
     adding: false,
-    list: [] as TVideo[],
+    list: [] as TMyVideo[],
     pagination: {
       total: 1,
       current: 1,
@@ -34,12 +34,9 @@ export default function myVideosStore() {
       const { error, result = {} } = await request.get("/videos/my");
       this.loading = false;
 
-      if (error) {
-        console.error(error.message);
-        return false;
-      }
+      if (error) return false;
 
-      const { totalCount, currentPage, list } = result as TVideoList;
+      const { totalCount, currentPage, list } = result as TMyVideoList;
       if (list) {
         this.list = list;
         this.pagination.total = totalCount;

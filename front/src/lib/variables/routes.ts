@@ -20,3 +20,10 @@ export const MY_VIDEOS: TRoute = {
   authority: true,
   component: pages.MyVideos,
 };
+
+export const VIDEO: TRoute = {
+  path: "/videos/my/:videoId(\\d+)",
+  exact: true,
+  authority: true,
+  component: pages.Video,
+};

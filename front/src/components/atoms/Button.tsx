@@ -62,7 +62,7 @@ const SIconButtonWrapper = styled.div`
 `;
 
 const SButton = styled.div.attrs(() => ({ role: "button" }))`
-  margin: 0 3px 3px 0;
+  margin: 0 6px 6px 0;
   border-width: 1px;
   border-style: solid;
   transition: all 0.1s ease 0s;

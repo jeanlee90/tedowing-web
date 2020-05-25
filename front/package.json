@@ -28,7 +28,8 @@
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.0",
     "styled-reset": "^4.1.4",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "video-react": "^0.14.1"
   },
   "scripts": {
     "start": "react-scripts start",

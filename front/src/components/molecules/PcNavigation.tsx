@@ -29,12 +29,8 @@ function PcNavigation({ menu }: TProps) {
 }
 
 const Sider = styled.div`
+  height: 100%;
   padding: 24px;
-  width: ${({ theme }) => theme.layoutSizes.pcNavigation};
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  top: ${({ theme }) => theme.layoutSizes.header};
   border-right: 1px solid ${({ theme }) => theme.colors.border};
   background-color: ${({ theme }) => theme.colors.white};
 `;

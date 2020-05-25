@@ -66,7 +66,7 @@ export const getTedVideoUrl = ({ dataSpec }) => {
 
 export const getTedTiming = async ({ talkId }) => {
   const timing = await getHtml(`https://hls.ted.com/talks/${talkId}.json`);
-  return timing?.data || {};
+  return timing?.data?.timing || {};
 };
 
 export const getTedTags = ({ dataSpec }) => {

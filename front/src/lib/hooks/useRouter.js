@@ -6,7 +6,7 @@ export function useRouter() {
   const params = useParams();
   const location = useLocation();
   const history = useHistory();
-  const match = useRouteMatch();
+  const match = useRouteMatch;
 
   return useMemo(() => {
     return {

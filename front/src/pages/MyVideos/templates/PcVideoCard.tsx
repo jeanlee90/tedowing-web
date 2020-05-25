@@ -1,18 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styles/theme-components";
-import { TVideo } from "stores/myVideosStore";
+import { TMyVideo } from "stores/myVideosStore";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 
-type TProps = Partial<TVideo>;
+type TProps = Partial<TMyVideo>;
 
 function PcVideoCard({ videoId, title, author, thumbnail, duration, isFavorite }: TProps) {
   const arrDur = (duration || "").slice(0, -1).split("M");
 
   return (
-    <Link to={`/videos/${videoId}`}>
+    <Link to={`/videos/my/${videoId}`}>
       <VideoCard>
         <VideoThumb thumbnail={thumbnail} />
         <VideoInfo>

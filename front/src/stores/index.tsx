@@ -2,9 +2,11 @@ import React from "react";
 import { loginStore, TLoginStore } from "./loginStore";
 import { useLocalStore } from "mobx-react-lite";
 import myVideosStore, { TMyVideosStore } from "./myVideosStore";
+import videoStore, { TVideoStore } from "./videoStore";
 
 interface TStore {
   loginStore: TLoginStore;
+  videoStore: TVideoStore;
   myVideosStore: TMyVideosStore;
 }
 
@@ -19,6 +21,7 @@ export const StoreProvider = ({ children }: TStoreProvider) => {
     <storeContext.Provider
       value={{
         loginStore: useLocalStore(loginStore),
+        videoStore: useLocalStore(videoStore),
         myVideosStore: useLocalStore(myVideosStore),
       }}
     >

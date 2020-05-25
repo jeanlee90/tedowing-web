@@ -5,6 +5,7 @@ import { isMobile } from "lib/utils/device";
 import styled from "styles/theme-components";
 import useRouter from "lib/hooks/useRouter";
 import * as routes from "lib/variables/routes";
+import Layout from "components/molecules/Layout";
 import PcHeader from "components/molecules/PcHeader";
 import MobileHeader from "components/molecules/MobileHeader";
 import PcNavigation from "components/molecules/PcNavigation";
@@ -12,6 +13,7 @@ import MobileNavigation from "components/molecules/MobileNavigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStream, faHistory } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
+import { useRouteMatch } from "react-router-dom";
 
 interface TProps {
   children: React.ReactNode;
@@ -34,13 +36,18 @@ function AppContainer({ children }: TProps) {
   const router = useRouter();
   const { loginStore } = useStore();
   const { email } = loginStore.getUserInfo();
+
+  const getMainPath = (path: string) => {
+    const pathArr = path.split("/");
+    return pathArr[1] + (pathArr[2] || "");
+  };
   const checkAuth = useCallback(async () => {
     const isLoggedIn = await loginStore.checkLogin();
-    const { authority } = Object.values(routes).find(r => r.path === router.pathname) || {};
+    const { authority } = Object.values(routes).find(r => getMainPath(r.path) === getMainPath(router.pathname)) || {};
 
     // 로그인 회원용 페이지
     if (authority && !isLoggedIn) return router.push(routes.HOME.path);
-  }, [loginStore, router]);
+  }, []);
 
   useEffect(() => {
     checkAuth();
@@ -55,24 +62,20 @@ function AppContainer({ children }: TProps) {
   const mobile = isMobile();
   const header = mobile ? <MobileHeader>test</MobileHeader> : <PcHeader email={email} onLogout={handleLogout} />;
   const navigation = mobile ? <MobileNavigation menu={menu} /> : <PcNavigation menu={menu} />;
-  const content = <Content>{children}</Content>;
 
-  // Main page
-  const { pathname } = useRouter();
-  if (pathname === routes.HOME.path) return <div>{children}</div>;
+  // Main, Video page
+  const { match } = router;
+  const { HOME, VIDEO } = routes;
+  const isMainPage = match(HOME.path);
+  const isVideoPage = match(VIDEO.path);
+  if (isMainPage?.isExact || isVideoPage?.isExact) return <div>{children}</div>;
 
   return (
-    <Layout>
-      {header}
-      {navigation}
-      {content}
+    <Layout header={header} mobile={mobile} navigation={navigation}>
+      <Content>{children}</Content>
     </Layout>
   );
 }
-
-const Layout = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-`;
 
 const Content = styled.div`
   padding: 24px;

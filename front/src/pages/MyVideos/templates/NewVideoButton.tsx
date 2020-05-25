@@ -23,7 +23,7 @@ function NewVideoButton({ adding, onClick }: TProps) {
       <Button primary circle icon={<FontAwesomeIcon icon={faPlus} />} onClick={handleToggle}>
         NEW VIDEO
       </Button>
-      <Modal visible={open} title="New Video" onClose={handleToggle}>
+      <Modal visible={open} title="New Video" onClose={handleToggle} keyboard={false} maskClosable={false}>
         <Input placeholder="Please enter the TED url..." button="Add Video" loading={adding} onEnter={handleClick} />
       </Modal>
     </>

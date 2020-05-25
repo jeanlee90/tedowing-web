@@ -1,5 +1,6 @@
 import express from "express";
 import * as UserRouter from "./users";
+import * as VideoRouter from "./videos";
 import * as MyVideoRouter from "./myVideos";
 
 const router = express.Router();
@@ -28,5 +29,8 @@ router
   .route("/videos/my/:videoId")
   .put([authenticateUser, MyVideoRouter.editFavoriteStatus])
   .delete([authenticateUser, MyVideoRouter.deleteMyVideo]);
+
+// videos
+router.route("/videos/:videoId").get(VideoRouter.getVideo);
 
 module.exports = router;

@@ -20,15 +20,10 @@ function PcHeader({ email, onLogout }: TProps) {
 }
 
 const Header = styled.div`
+  height: 100%;
   padding: 0 24px;
   display: flex;
   align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  height: ${({ theme }) => theme.layoutSizes.header};
   background-color: ${({ theme }) => theme.colors.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
