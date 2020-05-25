@@ -20,6 +20,8 @@ export const getTedHtmlData = async tedUrl => {
   if (!tedUrl) return;
 
   const html = await getHtml(tedUrl);
+  if (!html || !html.data) return;
+
   const $ = cheerio.load(html.data);
   const $dataSpec = $('script[data-spec="q"]').html();
   if (!$dataSpec) return;

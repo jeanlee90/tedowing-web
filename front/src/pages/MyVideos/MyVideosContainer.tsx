@@ -1,41 +1,41 @@
 import React, { useEffect } from "react";
-import styled from "styles/theme-components";
 import { isMobile } from "lib/utils/device";
-import { useLocalStore, useObserver } from "mobx-react-lite";
+import { useObserver } from "mobx-react-lite";
 import MyVideosTop from "./templates/MyVideosTop";
 import PcVideoCard from "./templates/PcVideoCard";
 import NewVideoButton from "./templates/NewVideoButton";
-import myVideosStore, { TMyVideosStore } from "./myVideosStore";
 import VideoCardList from "./templates/VideoCardList";
 import useRouter from "lib/hooks/useRouter";
+import { useStore } from "stores";
 
 function MyVideosContainer() {
-  const router = useRouter();
-  const store: TMyVideosStore = useLocalStore(myVideosStore);
-  const VideoCard = isMobile() ? PcVideoCard : PcVideoCard;
+  const { history } = useRouter();
+  const { myVideosStore: store } = useStore();
+  const handleClickNewVideo = async (value: string) => {
+    if (!value) return false;
+
+    const success = await store.addMyVideo(value);
+    if (success) await store.getMyVideos();
+    return success;
+  };
 
   useEffect(() => {
-    const { action } = router.history;
-    console.log(store.pagination, action);
-    if (store.list.length === 0 || action === "PUSH") store.getMyVideos();
-  }, []);
+    if (store.getList().length === 0 || history.action === "PUSH") store.getMyVideos();
+  }, [store, history.action]);
 
+  const VideoCard = isMobile() ? PcVideoCard : PcVideoCard;
   return useObserver(() => (
-    <SMyVideos>
+    <>
       <MyVideosTop>
-        <NewVideoButton />
+        <NewVideoButton adding={store.adding} onClick={handleClickNewVideo} />
       </MyVideosTop>
-      <VideoCardList>
+      <VideoCardList loading={store.loading}>
         {store.list.map(video => (
           <VideoCard {...video} key={video.videoId} />
         ))}
       </VideoCardList>
-    </SMyVideos>
+    </>
   ));
 }
-
-const SMyVideos = styled.div`
-  /* color: ; */
-`;
 
 export default MyVideosContainer;

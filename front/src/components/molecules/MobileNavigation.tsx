@@ -6,8 +6,8 @@ interface TProps {
   menu: TMenu[];
 }
 
-function MobileNavigation({}: TProps) {
-  return <SMobileNavigation>MobileNavigation</SMobileNavigation>;
+function MobileNavigation({ menu }: TProps) {
+  return <SMobileNavigation>MobileNavigation {JSON.stringify(menu)}</SMobileNavigation>;
 }
 
 const SMobileNavigation = styled.div``;

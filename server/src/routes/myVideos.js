@@ -182,12 +182,17 @@ export const addMyVideo = async (req, res, next) => {
       );
     }
 
+    // 지원하는 언어인지 검사 후 전달
+    const { uid, language } = req.user;
+    const hasLang = await db[`lang${language.replace("-", "").toUpperCase()}`].findOne({ where: videoId });
+    if (hasLang === null) return next(errorCodes["2002"]);
+
     // MyVideos에 Insert
-    const { uid } = req.user;
     await db.myVideos.create({ uid, videoId });
-    logger.info("addMyVideo - Success");
+    logger.info("addMyVideo - create my video");
 
     res.send(makeSuccessFormat());
+    logger.info("addMyVideo - Success");
   } catch (err) {
     next(err);
   }

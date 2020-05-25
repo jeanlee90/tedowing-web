@@ -1,19 +1,33 @@
-import React from "react";
-import styled from "styles/theme-components";
+import React, { useState } from "react";
+import Input from "components/atoms/Input";
+import Modal from "components/atoms/Modal";
 import Button from "components/atoms/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface TProps {}
-
-function NewVideoButton({}: TProps) {
-  return (
-    <Button primary circle icon={<FontAwesomeIcon icon={faPlus} />}>
-      New Video
-    </Button>
-  );
+interface TProps {
+  adding: boolean;
+  onClick: (value: string) => Promise<boolean>;
 }
 
-const SAddVideoButton = styled.div``;
+function NewVideoButton({ adding, onClick }: TProps) {
+  const [open, setOpen] = useState(false);
+  const handleToggle = () => setOpen(!open);
+  const handleClick = async (value: string) => {
+    const success = await onClick(value);
+    if (success) handleToggle();
+  };
+
+  return (
+    <>
+      <Button primary circle icon={<FontAwesomeIcon icon={faPlus} />} onClick={handleToggle}>
+        NEW VIDEO
+      </Button>
+      <Modal visible={open} title="New Video" onClose={handleToggle}>
+        <Input placeholder="Please enter the TED url..." button="Add Video" loading={adding} onEnter={handleClick} />
+      </Modal>
+    </>
+  );
+}
 
 export default NewVideoButton;

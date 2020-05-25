@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import styled from "styles/theme-components";
 import useOnClickOutside from "lib/hooks/useOnClickOutside";
 import Title from "./Title";
@@ -18,7 +18,7 @@ interface TProps {
 
 function Modal({ className, visible, title, closable, children, keyboard, maskClosable, onClose }: TProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const handleClose = () => onClose && onClose();
+  const handleClose = useCallback(() => onClose && onClose(), [onClose]);
 
   // maskClosable
   useOnClickOutside(ref, () => maskClosable && handleClose());
@@ -27,7 +27,7 @@ function Modal({ className, visible, title, closable, children, keyboard, maskCl
   const escPress = useKeyPress("Escape");
   useEffect(() => {
     if (keyboard && escPress) handleClose();
-  }, [escPress]);
+  }, [escPress, handleClose, keyboard]);
 
   // block scrolling
   useEffect(() => {
@@ -143,7 +143,7 @@ const CloseButton = styled.span.attrs(() => ({ role: "button" }))`
 `;
 
 const ModalContent = styled.div`
-  padding: 32px 0 16px 0;
+  padding: 32px 0 12px 0;
 `;
 
 export default Modal;

@@ -1,33 +1,43 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
+import { baseUrl } from "lib/variables/settings";
 
 export type DataFormat = AxiosResponse["data"];
 
-function logger(...args: any[]) {
-  if (process.env.NODE_ENV === "development") console.log(args);
-}
-
 // Axios Request Mapper
 async function request(option: AxiosRequestConfig): Promise<DataFormat> {
-  if (!option.url) return;
+  if (!option.url || !option.method) return;
 
   try {
-    const response = await axios({ ...option, withCredentials: true });
-    return response.data;
+    const url = `${baseUrl}/api${option.url}`;
+    const response = await axios({ ...option, url, withCredentials: true });
+    return response.data || {};
   } catch (e) {
     if (e.response) {
       const { data, status, headers } = e.response;
-      logger(data, status, headers);
-      if (data && data.error) data.error.message = `[CODE: ${data.error.code}] ${data.error.message}`;
+      console.error(data, status, headers);
+      if (data && data.error) {
+        data.error.message = `[CODE: ${data.error.code}] ${data.error.message}`;
+        alert(data.error.message);
+      }
 
       return { error: data.error || new Error(data) };
     } else if (e.request) {
-      logger(e.request);
+      console.error(e.request);
     } else {
-      logger("Error", e.message);
+      console.error("Error", e.message);
     }
 
-    logger(e);
+    return {};
   }
 }
 
-export default request;
+function requestByMethod(method: AxiosRequestConfig["method"]) {
+  return (url: AxiosRequestConfig["url"], option?: AxiosRequestConfig) => request({ ...option, url, method });
+}
+
+export default {
+  get: requestByMethod("GET"),
+  post: requestByMethod("POST"),
+  put: requestByMethod("PUT"),
+  delete: requestByMethod("DELETE"),
+};

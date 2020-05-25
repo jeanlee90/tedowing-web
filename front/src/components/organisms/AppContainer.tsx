@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useStore } from "stores";
 import { observer } from "mobx-react-lite";
 import { isMobile } from "lib/utils/device";
@@ -34,16 +34,17 @@ function AppContainer({ children }: TProps) {
   const router = useRouter();
   const { loginStore } = useStore();
   const { email } = loginStore.getUserInfo();
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const isLoggedIn = await loginStore.checkLogin();
     const { authority } = Object.values(routes).find(r => r.path === router.pathname) || {};
 
     // 로그인 회원용 페이지
     if (authority && !isLoggedIn) return router.push(routes.HOME.path);
-  };
+  }, [loginStore, router]);
+
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   const handleLogout = async () => {
     await loginStore.logout();
@@ -52,7 +53,7 @@ function AppContainer({ children }: TProps) {
 
   // Components by device
   const mobile = isMobile();
-  const header = mobile ? <MobileHeader /> : <PcHeader email={email} onLogout={handleLogout} />;
+  const header = mobile ? <MobileHeader>test</MobileHeader> : <PcHeader email={email} onLogout={handleLogout} />;
   const navigation = mobile ? <MobileNavigation menu={menu} /> : <PcNavigation menu={menu} />;
   const content = <Content>{children}</Content>;
 

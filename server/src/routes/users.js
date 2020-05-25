@@ -9,8 +9,10 @@ import { makeSuccessFormat } from "../lib/utils/makeRespFormat";
 const { GOOGLE_SCOPE } = config;
 
 export const requestLoginByGoogle = () => passport.authenticate("google", { scope: GOOGLE_SCOPE });
+
 export const loginByGoogle = () =>
-  passport.authenticate("google", { successRedirect: "/api/videos/main", failureRedirect: "/api/videos/my" });
+  passport.authenticate("google", { successRedirect: "http://localhost:3000/videos/my", failureRedirect: "/" });
+
 export const onLoginSuccess = async (profile, done) => {
   const { id: googleId, displayName, accessToken, email } = profile;
 

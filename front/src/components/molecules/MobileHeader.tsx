@@ -1,12 +1,16 @@
 import React from "react";
 import styled from "styles/theme-components";
 
-interface TProps {}
-
-function MobileHeader({}: TProps) {
-  return <SMobileHeader>MHeader</SMobileHeader>;
+interface TProps {
+  children: React.ReactNode;
 }
 
-const SMobileHeader = styled.div``;
+function MobileHeader({ children }: TProps) {
+  return <SMobileHeader>MHeader {children}</SMobileHeader>;
+}
+
+const SMobileHeader = styled.div`
+  font-weight: 700;
+`;
 
 export default MobileHeader;

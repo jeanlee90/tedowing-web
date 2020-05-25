@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styles/theme-components";
-import { TVideo } from "../myVideosStore";
+import { TVideo } from "stores/myVideosStore";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
@@ -66,7 +66,9 @@ const VideoInfo = styled.div`
 const VideoTitle = styled.div`
   font-weight: 700;
   line-height: 1.4;
-  height: 45px;
+  height: 40px;
+  margin-bottom: 6px;
+  overflow: hidden;
 `;
 
 const VideoAuthor = styled.div`

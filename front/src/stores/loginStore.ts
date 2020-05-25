@@ -1,6 +1,5 @@
 import { toJS } from "mobx";
 import request from "lib/utils/request";
-import { setAPIUrl } from "lib/variables/settings";
 
 export interface TUserInfo {
   uid: number;
@@ -18,7 +17,7 @@ export function loginStore() {
     isLoggedIn: false,
     userInfo: {} as TUserInfo,
     async checkLogin(): Promise<boolean> {
-      const { result = {} } = (await request({ url: setAPIUrl("/users/my"), method: "GET" })) || {};
+      const { result = {} } = await request.get("/users/my");
       const { isLoggedIn } = result as TCheckLoginAPI;
       if (result) {
         this.isLoggedIn = isLoggedIn;
@@ -28,7 +27,7 @@ export function loginStore() {
       return isLoggedIn;
     },
     async logout(): Promise<boolean> {
-      const { success } = await request({ url: setAPIUrl("/auth/logout"), method: "GET" });
+      const { success } = await request.get("/auth/logout");
       return success;
     },
     getUserInfo(): TUserInfo {

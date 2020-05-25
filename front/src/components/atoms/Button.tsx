@@ -24,20 +24,18 @@ interface TProps {
 
 type TStyled = ThemedProps<TProps>;
 
-function SIcon({ children, ...props }: TProps) {
-  let fIcon;
-  if (props.icon) fIcon = props.icon;
-  else if (props.loading) fIcon = <FontAwesomeIcon icon={faSpinner} spin />;
+function SIcon({ children, icon, loading, ...rest }: TProps) {
+  const fIcon = icon || <FontAwesomeIcon icon={faSpinner} spin />;
 
   return (
     <SIconButtonWrapper>
-      <SIconButtonIcon {...props}>{fIcon}</SIconButtonIcon>
-      <SIconButtonText>{props.loading ? "Loading" : children}</SIconButtonText>
+      <SIconButtonIcon {...rest}>{fIcon}</SIconButtonIcon>
+      <SIconButtonText>{loading ? "Loading" : children}</SIconButtonText>
     </SIconButtonWrapper>
   );
 }
 
-function Button({ className, children, ...rest }: TProps) {
+function Button({ className, children, loading, icon, ...rest }: TProps) {
   const [clicked, setClicked] = useState(false);
 
   return (
@@ -47,7 +45,13 @@ function Button({ className, children, ...rest }: TProps) {
       onMouseUp={() => setClicked(false)}
       onMouseDown={() => setClicked(true)}
     >
-      {!!rest.icon || rest.loading ? <SIcon {...rest}>{children}</SIcon> : children}
+      {!!icon || loading ? (
+        <SIcon icon={icon} loading={loading} {...rest}>
+          {children}
+        </SIcon>
+      ) : (
+        children
+      )}
     </SButton>
   );
 }
@@ -88,11 +92,12 @@ const SButton = styled.div.attrs(() => ({ role: "button" }))`
 
   // text color (:disabled, primary, border)
   color: ${({ theme, ...props }: TStyled) => {
-    if (props.disabled) return theme.colors.disabled;
+    if (!props.primary && props.disabled) return theme.colors.disabled;
     if (props.primary && props.border) return theme.colors.primary;
     if (props.primary) return theme.colors.white;
     return theme.colors.text;
   }};
+  opacity: ${({ disabled }: TStyled) => (disabled ? "0.7" : "1")};
 
   // animation
   transition-duration: 0.2s;
