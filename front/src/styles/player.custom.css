@@ -13,6 +13,10 @@
   margin-left: -39.5px;
 }
 
+.vjs-theme-custom .vjs-poster {
+  outline: none;
+}
+
 .vjs-theme-custom:hover .vjs-big-play-button {
   background-color: rgba(230, 43, 30, 0.5);
 }

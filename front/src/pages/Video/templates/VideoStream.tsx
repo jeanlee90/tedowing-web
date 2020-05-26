@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styles/theme-components";
 import Player from "components/atoms/Player";
 import { isMobile } from "lib/utils/device";
@@ -6,18 +6,17 @@ import { TVideo } from "stores/videoStore";
 
 type TProps = Pick<TVideo, "width" | "height" | "videoMedium" | "videoHigh" | "thumbnail">;
 
-function VideoStream({ width, height, videoMedium, videoHigh, thumbnail }: TProps) {
+function VideoStream({ videoMedium, videoHigh, thumbnail }: TProps) {
   const mobile = isMobile();
   const videoUrl = mobile ? videoMedium : videoHigh;
+  const streamRef = useRef<HTMLDivElement>(null);
 
   return (
-    <SVideoStream>
+    <SVideoStream ref={streamRef}>
       {videoUrl && (
         <Player
           controls
-          fluid={false}
           poster={thumbnail}
-          aspectRatio="16:9"
           sources={[
             {
               src: videoUrl,
@@ -31,11 +30,18 @@ function VideoStream({ width, height, videoMedium, videoHigh, thumbnail }: TProp
 }
 
 const SVideoStream = styled.div`
-  padding: 0 32px;
+  width: 100%;
   height: 100%;
 
-  video {
-    outline: 0;
+  > .c-player {
+    width: 100%;
+    height: 100%;
+
+    > .video-js {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+    }
   }
 `;
 

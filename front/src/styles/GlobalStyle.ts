@@ -15,13 +15,17 @@ const GlobalStyle = createGlobalStyle`
       line-height: 1.3;
       background-color: ${colors.background};
       color: ${colors.text};
+
+      &.theme-bk {
+        background-color: ${colors.black};
+      }
     }
     a {
       color: inherit;
       text-decoration: none;
       cursor: pointer;
     }
-    input, button {
+    input, button, video {
       outline: none;
       background-color: transparent;
       font-family:  -apple-system, BlinkMacSystemFont, Apple SD Gothic Neo, Roboto, "맑은 고딕", Malgun Gothic, "돋움", dotum, sans-serif;

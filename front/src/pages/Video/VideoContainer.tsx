@@ -13,10 +13,15 @@ function VideoContainer() {
   const { videoStore: store, loginStore } = useStore();
   const { query } = useRouter();
   const { videoId } = query;
+  const themeClass = "theme-bk";
 
   useEffect(() => {
     const info = store.getInfo();
     if (isEmpty(info) || info.videoId != videoId) store.getVideo(videoId);
+
+    // theme - black
+    document.body.classList.add(themeClass);
+    return () => document.body.classList.remove(themeClass);
   }, []);
 
   return useObserver(() => {

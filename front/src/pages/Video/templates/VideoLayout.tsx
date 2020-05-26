@@ -22,27 +22,31 @@ function VideoLayout({ stream, script, caption }: TProps) {
 const SVideoLayout = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100vw;
   height: 100vh;
   color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.black};
 `;
 
 const SVideoRow = styled.div`
   display: flex;
   flex: 1;
+  height: calc(100vh - 200px);
 `;
 
 const StreamWrapper = styled.div`
   flex: 1;
+  text-align: center;
+  width: calc(100vw - 400px);
 `;
 
 const ScriptWrapper = styled.div`
   width: 400px;
+  height: 100%;
   border-left: 1px solid ${({ theme }) => theme.colors.text};
 `;
 
 const CaptionWrapper = styled.div`
-  height: 200px;
+  min-height: 200px;
   border-top: 1px solid ${({ theme }) => theme.colors.text};
 `;
 

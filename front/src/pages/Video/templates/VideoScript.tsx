@@ -42,11 +42,13 @@ function VideoScript({ title, description, author, authorPhoto, script = {}, tim
   );
 }
 
-const VideoScriptWrapper = styled.div``;
+const VideoScriptWrapper = styled.div`
+  height: 100%;
+`;
 
 const ScriptList = styled.div`
   overflow-y: auto;
-  height: calc(100vh - 293px);
+  height: calc(100% - 94px);
 
   > *:nth-child(2n + 1) {
     background-color: ${({ theme }) => theme.colors.text};
@@ -55,7 +57,7 @@ const ScriptList = styled.div`
 
 const ScriptCard = styled.div.attrs(() => ({ role: "button" }))`
   display: flex;
-  padding: 12px 8px;
+  padding: 10px 12px;
 
   &:hover {
     opacity: 0.85;
@@ -63,8 +65,7 @@ const ScriptCard = styled.div.attrs(() => ({ role: "button" }))`
 `;
 
 const ScriptCardTime = styled.div`
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-right: 3px;
   width: 50px;
 `;
 

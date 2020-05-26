@@ -14,13 +14,16 @@ function VideoLanguage({}: TProps) {
 }
 
 const SVideoLanguage = styled.div`
-  padding: 8px 12px;
+  padding: 12px;
 `;
 
 const LangButton = styled.div.attrs(() => ({ role: "button" }))`
   display: inline-block;
-  padding: 4px;
   margin-right: 8px;
+
+  & + div {
+    padding-left: 6px;
+  }
 `;
 
 export default VideoLanguage;
