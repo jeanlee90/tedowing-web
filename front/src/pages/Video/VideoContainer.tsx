@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
+import { useStore } from "stores";
 import pick from "lodash/pick";
 import isEmpty from "lodash/isEmpty";
 import useRouter from "lib/hooks/useRouter";
-import { useStore } from "stores";
 import { useObserver } from "mobx-react-lite";
 import VideoLayout from "./templates/VideoLayout";
-import VideoStream from "./templates/VideoStream";
 import VideoScript from "./templates/VideoScript";
 import VideoCaption from "./templates/VideoCaption";
+import Player from "components/atoms/Player";
 
 function VideoContainer() {
-  const { videoStore: store, loginStore } = useStore();
+  const { videoStore: store } = useStore();
   const { query } = useRouter();
   const { videoId } = query;
   const themeClass = "theme-bk";
@@ -26,13 +26,27 @@ function VideoContainer() {
 
   return useObserver(() => {
     const info = store.getInfo();
-    const streamProps = pick(info, ["width", "height", "videoMedium", "videoHigh", "thumbnail"]);
-    const scriptProps = pick(info, ["title", "description", "author", "authorPhoto", "script", "timing"]);
+    const { videoMedium, thumbnail } = info;
+    const scriptProps = pick(info, ["title", "description", "author", "authorPhoto", "script"]);
 
     return (
       <VideoLayout
-        stream={<VideoStream {...streamProps} />}
-        script={<VideoScript {...scriptProps} />}
+        stream={
+          videoMedium && (
+            <Player
+              controls
+              poster={thumbnail}
+              sources={[
+                {
+                  src: videoMedium,
+                  type: "video/mp4",
+                },
+              ]}
+              onChangeTime={store.setCurrentCaption}
+            />
+          )
+        }
+        script={<VideoScript {...scriptProps} currentTime={store.currentCaptionTime} />}
         caption={<VideoCaption />}
       />
     );

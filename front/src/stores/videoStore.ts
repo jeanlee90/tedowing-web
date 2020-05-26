@@ -1,9 +1,16 @@
-import request from "lib/utils/request";
 import { toJS } from "mobx";
+import request from "lib/utils/request";
+import { getCurrentCaptionTime } from "lib/utils/binarySearch";
 
 interface TTiming {
   start: number;
   end: number;
+}
+
+export interface TCaption {
+  time: number;
+  text?: string;
+  trans?: string;
 }
 
 export interface TVideo {
@@ -29,11 +36,7 @@ export interface TVideo {
     end?: TTiming;
   };
   script: {
-    [time: number]: {
-      time: number;
-      text?: string;
-      trans?: string;
-    };
+    [time: number]: TCaption;
   };
 }
 
@@ -41,6 +44,14 @@ export default function videoStore() {
   return {
     loading: true,
     info: {} as TVideo,
+    scriptTimes: [] as number[],
+    currentCaptionTime: 0,
+    setCurrentCaption(currentTime: number) {
+      const times = toJS(this.scriptTimes);
+      const index = getCurrentCaptionTime(times, currentTime) - 1;
+      if (index < 0) this.currentCaptionTime = 0;
+      else this.currentCaptionTime = times[index];
+    },
     getInfo() {
       return toJS(this.info);
     },
@@ -50,7 +61,11 @@ export default function videoStore() {
       this.loading = false;
 
       if (error) return false;
-      if (result) this.info = result;
+      if (result) this.info = { ...result };
+
+      // script 찾기용
+      if (result.script) this.scriptTimes = Object.keys(result.script).map(t => +t);
+
       return true;
     },
   };

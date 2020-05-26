@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styles/theme-components";
 import { TVideo } from "stores/videoStore";
 import Text, { Types } from "components/atoms/Text";
@@ -6,19 +6,29 @@ import VideoLanguage from "./VideoLanguage";
 import Collapse from "./Collapse";
 import Speaker from "./Speaker";
 
-type TProps = Pick<TVideo, "title" | "description" | "author" | "authorPhoto" | "script" | "timing">;
+type TProps = Pick<TVideo, "title" | "description" | "author" | "authorPhoto" | "script"> & {
+  currentTime: number;
+};
 
 function msToTime(duration: number) {
-  const seconds = Math.floor((duration / 1000) % 60);
-  const minutes = Math.floor((duration / (1000 * 60)) % 60);
+  const seconds = Math.floor(duration % 60);
+  const minutes = Math.floor((duration / 60) % 60);
   const m = minutes < 10 ? "0" + minutes : minutes;
   const s = seconds < 10 ? "0" + seconds : seconds;
 
   return m + ":" + s;
 }
 
-function VideoScript({ title, description, author, authorPhoto, script = {}, timing }: TProps) {
-  const introTime = (timing?.intro?.end || 0) * 1000;
+function VideoScript({ title, description, author, authorPhoto, script = {}, currentTime }: TProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (scrollRef.current && activeRef.current) {
+      const scrollTop = activeRef.current.offsetTop - 94 - scrollRef.current.offsetHeight / 2;
+      scrollRef.current.scrollTop = scrollTop < 0 ? 0 : scrollTop;
+    }
+  }, [currentTime]);
 
   return (
     <VideoScriptWrapper>
@@ -27,16 +37,21 @@ function VideoScript({ title, description, author, authorPhoto, script = {}, tim
         <Speaker photo={authorPhoto} name={author} />
       </Collapse>
       <VideoLanguage />
-      <ScriptList>
-        {Object.values(script).map(({ text, trans, time }) => (
-          <ScriptCard key={time}>
-            <ScriptCardTime>{msToTime(time + introTime)}</ScriptCardTime>
-            <ScriptCardTextWrapper>
-              {text && <ScriptCardText>{text}</ScriptCardText>}
-              {trans && <ScriptCardText>{trans}</ScriptCardText>}
-            </ScriptCardTextWrapper>
-          </ScriptCard>
-        ))}
+      <ScriptList ref={scrollRef}>
+        {Object.keys(script).map(time => {
+          const { text, trans } = script[+time];
+          const isActive = currentTime > 0 && +time === currentTime;
+
+          return (
+            <ScriptCard key={time} className={isActive ? "active" : ""} ref={isActive ? activeRef : null}>
+              <ScriptCardTime>{msToTime(+time)}</ScriptCardTime>
+              <ScriptCardTextWrapper>
+                {text && <ScriptCardText>{text}</ScriptCardText>}
+                {trans && <ScriptCardText>{trans}</ScriptCardText>}
+              </ScriptCardTextWrapper>
+            </ScriptCard>
+          );
+        })}
       </ScriptList>
     </VideoScriptWrapper>
   );
@@ -61,6 +76,10 @@ const ScriptCard = styled.div.attrs(() => ({ role: "button" }))`
 
   &:hover {
     opacity: 0.85;
+  }
+
+  &.active {
+    color: red;
   }
 `;
 
