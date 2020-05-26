@@ -64,7 +64,7 @@ export default function videoStore() {
       if (result) this.info = { ...result };
 
       // script 찾기용
-      if (result.script) this.scriptTimes = Object.keys(result.script).map(t => +t);
+      this.scriptTimes = Object.keys(result.script).map(t => +t);
 
       return true;
     },

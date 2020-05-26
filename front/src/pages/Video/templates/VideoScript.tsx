@@ -64,22 +64,29 @@ const VideoScriptWrapper = styled.div`
 const ScriptList = styled.div`
   overflow-y: auto;
   height: calc(100% - 94px);
-
-  > *:nth-child(2n + 1) {
-    background-color: ${({ theme }) => theme.colors.text};
-  }
 `;
 
 const ScriptCard = styled.div.attrs(() => ({ role: "button" }))`
   display: flex;
   padding: 10px 12px;
+  position: relative;
 
   &:hover {
     opacity: 0.85;
   }
 
   &.active {
-    color: red;
+    background-color: ${({ theme }) => theme.colors.text};
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      background-color: ${({ theme }) => theme.colors.primary};
+    }
   }
 `;
 
