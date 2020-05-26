@@ -93,6 +93,7 @@ export const getTedLanguages = ({ talkId, dataSpec }) => {
         getHtml(scriptUrl).then(obj => {
           script = obj.data || {};
           if (isEmpty(script)) resolve();
+          script = script.paragraphs.reduce((m, p) => [...m, ...p.cues], []);
 
           const videoInfoUrl = `https://www.ted.com/services/v1/oembed.json?url=${config.TED_URL}/${talkId}&language=${languageCode}`;
           getHtml(videoInfoUrl).then(obj => {

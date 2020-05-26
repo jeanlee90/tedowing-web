@@ -21,7 +21,7 @@ function MyVideosContainer() {
 
   useEffect(() => {
     if (store.getList().length === 0 || history.action === "PUSH") store.getMyVideos();
-  }, [store, history.action]);
+  }, []);
 
   const VideoCard = isMobile() ? PcVideoCard : PcVideoCard;
   return useObserver(() => (

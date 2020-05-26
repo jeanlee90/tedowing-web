@@ -12,8 +12,8 @@ function PcVideoCard({ videoId, title, author, thumbnail, duration, isFavorite }
   const arrDur = (duration || "").slice(0, -1).split("M");
 
   return (
-    <Link to={`/videos/my/${videoId}`}>
-      <VideoCard>
+    <VideoCard>
+      <Link to={`/videos/my/${videoId}`}>
         <VideoThumb thumbnail={thumbnail} />
         <VideoInfo>
           <VideoTitle>{title}</VideoTitle>
@@ -27,17 +27,20 @@ function PcVideoCard({ videoId, title, author, thumbnail, duration, isFavorite }
             <FontAwesomeIcon icon={isFavorite ? faSolidHeart : faHeart} />
           </VideoFavorite>
         </VideoInfo>
-      </VideoCard>
-    </Link>
+      </Link>
+    </VideoCard>
   );
 }
 
 const VideoCard = styled.div`
   display: inline-block;
-  width: 243px;
-  margin: 8px;
+  margin: 1%;
   border-radius: 3px;
   overflow: hidden;
+
+  ${({ theme }) => theme.media.desktop(` width: 31%;`)};
+  ${({ theme }) => theme.media.tablet(`width: 31%;`)};
+  ${({ theme }) => theme.media.ipad(`width: 48%;`)};
 
   // animation
   transition-duration: 0.2s;
@@ -50,7 +53,7 @@ const VideoCard = styled.div`
 `;
 
 const VideoThumb = styled.div<TProps>`
-  height: 137px;
+  padding-bottom: 50%;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -66,9 +69,16 @@ const VideoInfo = styled.div`
 const VideoTitle = styled.div`
   font-weight: 700;
   line-height: 1.4;
-  height: 40px;
+  height: 39px;
   margin-bottom: 6px;
   overflow: hidden;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  -webkit-line-clamp: 2;
 `;
 
 const VideoAuthor = styled.div`

@@ -37,10 +37,7 @@ export const getVideo = async (req, res, next) => {
     if (videoEnLang === null) return next(errorCodes[2003]);
 
     let { title, author, description, script } = videoEnLang.dataValues;
-    script = keyBy(
-      script.paragraphs.reduce((m, p) => [...m, ...p.cues], []),
-      o => o.time,
-    );
+    script = keyBy(script, o => o.time);
 
     // user language
     const userLang = req.user?.language;
@@ -49,15 +46,13 @@ export const getVideo = async (req, res, next) => {
       if (videoUserLang === null) return next(errorCodes[2003]);
 
       const userLangInfo = videoUserLang.dataValues;
-      userLangInfo.script.paragraphs.forEach(({ cues }) =>
-        cues.forEach(({ time, text }) => {
-          if (!script[time]) script[time] = { time };
-          script[time].trans = text;
-        }),
-      );
       title = userLangInfo.title;
       author = userLangInfo.author;
       description = userLangInfo.description;
+      userLangInfo.script.forEach(({ text, time }) => {
+        if (!script[time]) script[time] = { time };
+        script[time].trans = text;
+      });
     }
 
     const result = { ...video.dataValues, title, author, description, script };

@@ -8,11 +8,8 @@ import VideoLayout from "./templates/VideoLayout";
 import VideoStream from "./templates/VideoStream";
 import VideoScript from "./templates/VideoScript";
 import VideoCaption from "./templates/VideoCaption";
-import "video-react/dist/video-react.css";
 
-interface TProps {}
-
-function VideoContainer({}: TProps) {
+function VideoContainer() {
   const { videoStore: store, loginStore } = useStore();
   const { query } = useRouter();
   const { videoId } = query;
@@ -20,7 +17,7 @@ function VideoContainer({}: TProps) {
   useEffect(() => {
     const info = store.getInfo();
     if (isEmpty(info) || info.videoId != videoId) store.getVideo(videoId);
-  }, [videoId, store]);
+  }, []);
 
   return useObserver(() => {
     const info = store.getInfo();

@@ -51,7 +51,7 @@ function AppContainer({ children }: TProps) {
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []);
 
   const handleLogout = async () => {
     await loginStore.logout();

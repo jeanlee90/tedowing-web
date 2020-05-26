@@ -13,7 +13,7 @@ function useKeyPress(targetKey) {
       window.removeEventListener("keydown", downHandler);
       window.removeEventListener("keyup", upHandler);
     };
-  }, [downHandler, upHandler]);
+  }, []);
 
   return keyPressed;
 }

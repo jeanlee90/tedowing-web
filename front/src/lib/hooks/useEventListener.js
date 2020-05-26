@@ -6,7 +6,7 @@ function useEventListener(eventName, handler, element = window) {
 
   useEffect(() => {
     savedHandler.current = handler;
-  }, [handler]);
+  }, []);
 
   useEffect(
     () => {

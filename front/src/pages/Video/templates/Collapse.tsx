@@ -33,13 +33,15 @@ const CollapseWrapper = styled.div.attrs(() => ({ role: "button" }))`
 const CollapseTitle = styled.div`
   display: flex;
   padding: 16px 12px;
-  text-overflow: ellipsis;
 `;
 
 const CollapseTitleText = styled.div`
   flex: 1;
   font-size: ${({ theme }) => theme.fontSizes.title};
   width: calc(100% - 25px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const CollapseIcon = styled.div``;

@@ -3,6 +3,7 @@ import baseStyled, { css, CSSProp, ThemedStyledInterface } from "styled-componen
 type BackQuoteArgs = string[];
 interface Media {
   mobile: (...args: BackQuoteArgs) => CSSProp | undefined;
+  ipad: (...args: BackQuoteArgs) => CSSProp | undefined;
   tablet: (...args: BackQuoteArgs) => CSSProp | undefined;
   desktop: (...args: BackQuoteArgs) => CSSProp | undefined;
 }
@@ -10,12 +11,14 @@ interface Media {
 // responsive
 const sizes: { [key: string]: number } = {
   mobile: 320,
-  tablet: 768,
+  ipad: 768,
+  tablet: 991,
   desktop: 1024,
 };
 
 const media: Media = {
   mobile: (...args: BackQuoteArgs) => undefined,
+  ipad: (...args: BackQuoteArgs) => undefined,
   tablet: (...args: BackQuoteArgs) => undefined,
   desktop: (...args: BackQuoteArgs) => undefined,
 };
@@ -38,10 +41,18 @@ Object.keys(sizes).reduce((acc: Media, label: string) => {
           }
         `;
       break;
+    case "ipad":
+      acc.ipad = (...args: BackQuoteArgs) =>
+        css`
+          @media only screen and (max-width: ${sizes.tablet}px) and (min-width: ${sizes.ipad}px) {
+            ${args}
+          }
+        `;
+      break;
     case "mobile":
       acc.mobile = (...args: BackQuoteArgs) =>
         css`
-          @media only screen and (max-width: ${sizes.tablet}px) {
+          @media only screen and (max-width: ${sizes.ipad}px) {
             ${args}
           }
         `;
