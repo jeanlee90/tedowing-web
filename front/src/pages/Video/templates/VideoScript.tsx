@@ -8,6 +8,7 @@ import Speaker from "./Speaker";
 
 type TProps = Pick<TVideo, "title" | "description" | "author" | "authorPhoto" | "script"> & {
   currentTime: number;
+  onClickScript: (time: number) => void;
 };
 
 function msToTime(duration: number) {
@@ -19,7 +20,7 @@ function msToTime(duration: number) {
   return m + ":" + s;
 }
 
-function VideoScript({ title, description, author, authorPhoto, script = {}, currentTime }: TProps) {
+function VideoScript({ title, description, author, authorPhoto, script = {}, currentTime, onClickScript }: TProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLDivElement>(null);
 
@@ -39,12 +40,18 @@ function VideoScript({ title, description, author, authorPhoto, script = {}, cur
       <VideoLanguage />
       <ScriptList ref={scrollRef}>
         {Object.keys(script).map(time => {
-          const { text, trans } = script[+time];
-          const isActive = currentTime > 0 && +time === currentTime;
+          const sTime = +time;
+          const { text, trans } = script[sTime];
+          const isActive = currentTime > 0 && sTime === currentTime;
 
           return (
-            <ScriptCard key={time} className={isActive ? "active" : ""} ref={isActive ? activeRef : null}>
-              <ScriptCardTime>{msToTime(+time)}</ScriptCardTime>
+            <ScriptCard
+              key={sTime}
+              ref={isActive ? activeRef : null}
+              className={isActive ? "active" : ""}
+              onClick={() => onClickScript(sTime)}
+            >
+              <ScriptCardTime>{msToTime(sTime)}</ScriptCardTime>
               <ScriptCardTextWrapper>
                 {text && <ScriptCardText>{text}</ScriptCardText>}
                 {trans && <ScriptCardText>{trans}</ScriptCardText>}

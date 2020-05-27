@@ -43,7 +43,9 @@ export interface TVideo {
 export default function videoStore() {
   return {
     loading: true,
-    info: {} as TVideo,
+    info: {
+      script: {},
+    } as TVideo,
     scriptTimes: [] as number[],
     currentCaptionTime: 0,
     setCurrentCaption(currentTime: number) {

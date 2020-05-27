@@ -30,7 +30,7 @@ const SVideoLayout = styled.div`
 const SVideoRow = styled.div`
   display: flex;
   flex: 1;
-  height: calc(100vh - 200px);
+  height: calc(100vh - ${({ theme }) => theme.layoutSizes.videoCaption});
 `;
 
 const StreamWrapper = styled.div`
@@ -46,7 +46,7 @@ const ScriptWrapper = styled.div`
 `;
 
 const CaptionWrapper = styled.div`
-  min-height: 200px;
+  min-height: ${({ theme }) => theme.layoutSizes.videoCaption};
   border-top: 1px solid ${({ theme }) => theme.colors.text};
 `;
 

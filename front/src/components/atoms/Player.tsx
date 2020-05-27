@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, forwardRef, MutableRefObject } from "react";
 import videojs from "video.js";
 import styled from "styles/theme-components";
 
@@ -9,13 +9,12 @@ import "styles/player.custom.css";
 type TChangeFn = (currentTime: number) => void;
 
 type TProps = videojs.PlayerOptions & {
-  onChangeTime?: TChangeFn;
+  onAfterChangeTime?: TChangeFn;
 };
 
-function Player({ onChangeTime, ...props }: TProps) {
+const Player = forwardRef<HTMLVideoElement, TProps>(({ onAfterChangeTime, ...props }, ref) => {
   let player: videojs.Player | null = null;
   let refreshIntervalChange: number = 0;
-  const videoNode = React.useRef<HTMLVideoElement>(null);
 
   const clearIntervalChange = () => {
     if (refreshIntervalChange) {
@@ -25,17 +24,23 @@ function Player({ onChangeTime, ...props }: TProps) {
   };
 
   useEffect(() => {
-    player = videojs(videoNode.current, props).ready(function (this: videojs.Player) {
-      this.on("play", function (_player: videojs.Player) {
-        const curNode = videoNode.current as HTMLVideoElement;
+    if (!ref) return;
 
-        if (!refreshIntervalChange && onChangeTime && curNode) {
+    const videoRef = ref as MutableRefObject<HTMLVideoElement>;
+    player = videojs(videoRef.current, props).ready(function (this: videojs.Player) {
+      // set interval
+      this.on("play", function (_player: videojs.Player) {
+        const curNode = videoRef.current;
+
+        if (!refreshIntervalChange && onAfterChangeTime && curNode) {
           refreshIntervalChange = setInterval(() => {
-            onChangeTime(curNode?.currentTime);
+            // 쉐도잉은 자막을 좀 더 빠르게 보는 게 의미가 있어서 1을 더함.
+            onAfterChangeTime(curNode.currentTime + 1);
           }, 1000);
         }
       });
 
+      // clear interval
       this.on("pause", function () {
         clearIntervalChange();
       });
@@ -54,11 +59,11 @@ function Player({ onChangeTime, ...props }: TProps) {
   return (
     <CPlayer className="c-player">
       <div className="c-player__screen" data-vjs-player="true">
-        <video ref={videoNode} className="video-js vjs-theme-custom" />
+        <video ref={ref} className="video-js vjs-theme-custom" />
       </div>
     </CPlayer>
   );
-}
+});
 
 const CPlayer = styled.div`
   width: 100%;

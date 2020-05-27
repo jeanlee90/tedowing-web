@@ -14,6 +14,7 @@ function VideoContainer() {
   const { query } = useRouter();
   const { videoId } = query;
   const themeClass = "theme-bk";
+  const videoNode = React.useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const info = store.getInfo();
@@ -24,10 +25,18 @@ function VideoContainer() {
     return () => document.body.classList.remove(themeClass);
   }, []);
 
+  const handleChangeTime = (time: number) => {
+    if (!videoNode.current || time === undefined) return;
+
+    const curNode = videoNode.current;
+    if (curNode.paused) curNode.play();
+    curNode.currentTime = time;
+  };
+
   return useObserver(() => {
     const info = store.getInfo();
-    const { videoMedium, thumbnail } = info;
-    const scriptProps = pick(info, ["title", "description", "author", "authorPhoto", "script"]);
+    const { title, description, author, authorPhoto, script, videoMedium, thumbnail } = info;
+    const scriptProps = { title, description, author, authorPhoto, script };
 
     return (
       <VideoLayout
@@ -42,12 +51,13 @@ function VideoContainer() {
                   type: "video/mp4",
                 },
               ]}
-              onChangeTime={store.setCurrentCaption}
+              ref={videoNode}
+              onAfterChangeTime={store.setCurrentCaption}
             />
           )
         }
-        script={<VideoScript {...scriptProps} currentTime={store.currentCaptionTime} />}
-        caption={<VideoCaption />}
+        script={<VideoScript {...scriptProps} currentTime={store.currentCaptionTime} onClickScript={handleChangeTime} />}
+        caption={<VideoCaption caption={script[store.currentCaptionTime]} />}
       />
     );
   });
