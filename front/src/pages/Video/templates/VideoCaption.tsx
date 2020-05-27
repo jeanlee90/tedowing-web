@@ -1,18 +1,19 @@
 import React from "react";
 import styled from "styles/theme-components";
-import { TCaption } from "stores/videoStore";
+import { TCaption, TLangSwitch } from "stores/videoStore";
 
 interface TProps {
   caption: TCaption;
+  langSwitch: TLangSwitch;
 }
 
-function VideoCaption({ caption }: TProps) {
+function VideoCaption({ caption, langSwitch }: TProps) {
   const { text, trans } = caption;
 
   return (
     <SVideoCaption>
-      {text && <CaptionEn>{text}</CaptionEn>}
-      {trans && <CaptionUl>{trans}</CaptionUl>}
+      {text && langSwitch.en && <CaptionEn>{text}</CaptionEn>}
+      {trans && langSwitch.user && <CaptionUl>{trans}</CaptionUl>}
     </SVideoCaption>
   );
 }

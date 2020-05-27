@@ -23,7 +23,7 @@ import { makeSuccessFormat } from "../lib/utils/makeRespFormat";
  *    - thumbnail
  *    - duration
  */
-const getRealTime = (cur, intro) => (cur + intro) / 1000;
+const getRealTime = (cur, intro) => (+cur + +intro) / 1000;
 export const getVideo = async (req, res, next) => {
   try {
     logger.info("getVideo - Request");
@@ -53,14 +53,15 @@ export const getVideo = async (req, res, next) => {
       author = userLangInfo.author;
       description = userLangInfo.description;
       userLangInfo.script.forEach(({ text, time }) => {
-        const realTime = getRealTime(time, introTime);
+        const realTime = getRealTime(time, introTime) * 1;
 
         if (!script[realTime]) script[realTime] = { time };
         script[realTime].trans = text;
       });
     }
 
-    const result = { ...video.dataValues, title, author, description, script };
+    const scriptTimes = Object.keys(script).map(Number);
+    const result = { ...video.dataValues, title, author, description, script, scriptTimes };
     delete result.createdAt;
     delete result.updatedAt;
 

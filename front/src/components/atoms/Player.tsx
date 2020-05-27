@@ -34,8 +34,7 @@ const Player = forwardRef<HTMLVideoElement, TProps>(({ onAfterChangeTime, ...pro
 
         if (!refreshIntervalChange && onAfterChangeTime && curNode) {
           refreshIntervalChange = setInterval(() => {
-            // 쉐도잉은 자막을 좀 더 빠르게 보는 게 의미가 있어서 1을 더함.
-            onAfterChangeTime(curNode.currentTime + 1);
+            onAfterChangeTime(curNode.currentTime);
           }, 1000);
         }
       });

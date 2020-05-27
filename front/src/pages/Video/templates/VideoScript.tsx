@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styles/theme-components";
-import { TVideo } from "stores/videoStore";
+import { TVideo, TLangSwitch } from "stores/videoStore";
 import Text, { Types } from "components/atoms/Text";
-import VideoLanguage from "./VideoLanguage";
 import Collapse from "./Collapse";
 import Speaker from "./Speaker";
 
 type TProps = Pick<TVideo, "title" | "description" | "author" | "authorPhoto" | "script"> & {
   currentTime: number;
+  langSwitch: TLangSwitch;
+  language: React.ReactNode;
   onClickScript: (time: number) => void;
 };
 
@@ -20,11 +21,21 @@ function msToTime(duration: number) {
   return m + ":" + s;
 }
 
-function VideoScript({ title, description, author, authorPhoto, script = {}, currentTime, onClickScript }: TProps) {
+function VideoScript({
+  title,
+  description,
+  author,
+  authorPhoto,
+  script,
+  language,
+  langSwitch,
+  currentTime,
+  onClickScript,
+}: TProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (scrollRef.current && activeRef.current) {
       const scrollTop = activeRef.current.offsetTop - 94 - scrollRef.current.offsetHeight / 2;
       scrollRef.current.scrollTop = scrollTop < 0 ? 0 : scrollTop;
@@ -37,26 +48,30 @@ function VideoScript({ title, description, author, authorPhoto, script = {}, cur
         <Text type={Types.inverted}>{description}</Text>
         <Speaker photo={authorPhoto} name={author} />
       </Collapse>
-      <VideoLanguage />
+      {language}
       <ScriptList ref={scrollRef}>
         {Object.keys(script).map(time => {
           const sTime = +time;
           const { text, trans } = script[sTime];
+          const isShowEn = langSwitch.en && text;
+          const isShowUl = langSwitch.user && trans;
           const isActive = currentTime > 0 && sTime === currentTime;
 
           return (
-            <ScriptCard
-              key={sTime}
-              ref={isActive ? activeRef : null}
-              className={isActive ? "active" : ""}
-              onClick={() => onClickScript(sTime)}
-            >
-              <ScriptCardTime>{msToTime(sTime)}</ScriptCardTime>
-              <ScriptCardTextWrapper>
-                {text && <ScriptCardText>{text}</ScriptCardText>}
-                {trans && <ScriptCardText>{trans}</ScriptCardText>}
-              </ScriptCardTextWrapper>
-            </ScriptCard>
+            (isShowEn || isShowUl) && (
+              <ScriptCard
+                key={sTime}
+                ref={isActive ? activeRef : null}
+                className={isActive ? "active" : ""}
+                onClick={() => onClickScript(sTime)}
+              >
+                <ScriptCardTime>{msToTime(sTime)}</ScriptCardTime>
+                <ScriptCardTextWrapper>
+                  {isShowEn && <ScriptCardText>{text}</ScriptCardText>}
+                  {isShowUl && <ScriptCardText>{trans}</ScriptCardText>}
+                </ScriptCardTextWrapper>
+              </ScriptCard>
+            )
           );
         })}
       </ScriptList>

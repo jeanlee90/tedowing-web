@@ -7,6 +7,11 @@ interface TTiming {
   end: number;
 }
 
+export interface TLangSwitch {
+  en: boolean;
+  user: boolean;
+}
+
 export interface TCaption {
   time: number;
   text?: string;
@@ -38,6 +43,7 @@ export interface TVideo {
   script: {
     [time: number]: TCaption;
   };
+  scriptTimes: number[];
 }
 
 export default function videoStore() {
@@ -45,17 +51,27 @@ export default function videoStore() {
     loading: true,
     info: {
       script: {},
+      scriptTimes: [0],
     } as TVideo,
-    scriptTimes: [] as number[],
     currentCaptionTime: 0,
+    langSwitch: {
+      en: true,
+      user: true,
+    } as TLangSwitch,
+    getInfo() {
+      return toJS(this.info);
+    },
+    getLangSwitch() {
+      return toJS(this.langSwitch);
+    },
     setCurrentCaption(currentTime: number) {
-      const times = toJS(this.scriptTimes);
+      const times = toJS(this.info.scriptTimes);
       const index = getCurrentCaptionTime(times, currentTime) - 1;
       if (index < 0) this.currentCaptionTime = 0;
       else this.currentCaptionTime = times[index];
     },
-    getInfo() {
-      return toJS(this.info);
+    toggleLanguage(lang: keyof TLangSwitch) {
+      this.langSwitch[lang] = !this.langSwitch[lang];
     },
     async getVideo(videoId: number): Promise<boolean> {
       this.loading = true;
@@ -63,10 +79,7 @@ export default function videoStore() {
       this.loading = false;
 
       if (error) return false;
-      if (result) this.info = { ...result };
-
-      // script 찾기용
-      this.scriptTimes = Object.keys(result.script).map(t => +t);
+      if (result) this.info = result;
 
       return true;
     },
