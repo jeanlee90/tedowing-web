@@ -1,0 +1,56 @@
+{
+  "name": "front",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "^24.0.0",
+    "@types/lodash": "^4.14.152",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/styled-components": "^5.1.0",
+    "@types/video.js": "^7.3.9",
+    "react-router-dom": "^5.2.0"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-brands-svg-icons": "^5.13.0",
+    "@fortawesome/free-regular-svg-icons": "^5.13.0",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "mobx": "^4.15.4",
+    "mobx-react-lite": "^2.0.7",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
+    "styled-components": "^5.1.0",
+    "styled-reset": "^4.1.4",
+    "typescript": "~3.7.2",
+    "video.js": "^7.7.6"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
