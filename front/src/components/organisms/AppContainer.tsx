@@ -26,7 +26,7 @@ export interface TMenu {
 
 const menu: TMenu[] = [
   { text: "My Videos", link: routes.MY_VIDEOS.path, icon: <FontAwesomeIcon icon={faStream} /> },
-  { text: "Recents", link: "/recents/my", icon: <FontAwesomeIcon icon={faHistory} /> },
+  // { text: "Recents", link: "/recents/my", icon: <FontAwesomeIcon icon={faHistory} /> },
   { text: "Contact Support", link: "/support", icon: <FontAwesomeIcon icon={faQuestionCircle} /> },
 ];
 

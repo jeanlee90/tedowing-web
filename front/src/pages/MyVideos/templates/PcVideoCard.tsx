@@ -23,9 +23,9 @@ function PcVideoCard({ videoId, title, author, thumbnail, duration, isFavorite }
               {("0" + arrDur[0]).slice(-2)}:{("0" + arrDur[1]).slice(-2)}
             </VideoDuration>
           )}
-          <VideoFavorite>
+          {/* <VideoFavorite>
             <FontAwesomeIcon icon={isFavorite ? faSolidHeart : faHeart} />
-          </VideoFavorite>
+          </VideoFavorite> */}
         </VideoInfo>
       </Link>
     </VideoCard>
