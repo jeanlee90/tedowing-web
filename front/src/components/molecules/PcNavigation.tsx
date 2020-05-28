@@ -1,19 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styles/theme-components";
 import { TMenu } from "components/organisms/AppContainer";
 import Copyright from "components/atoms/Copyright";
+import useRouter from "lib/hooks/useRouter";
 
 interface TProps {
   menu: TMenu[];
 }
 
 function PcNavigation({ menu }: TProps) {
+  const router = useRouter();
+  const [currentPath, setCurrentPath] = useState(router.pathname);
+  const changeCurrentPath = (pathname: string) => {
+    const paths = pathname.split("/");
+    setCurrentPath(`/${paths[1]}/${paths[2]}`);
+  };
+
+  useEffect(() => {
+    const { history } = router;
+    changeCurrentPath(history.location.pathname);
+
+    const unlisten = history.listen(() => changeCurrentPath(history.location.pathname));
+    return () => unlisten();
+  }, []);
+
   return (
     <Sider>
       <Nav>
         {menu.map((m, i) => (
-          <Item key={i} aria-selected={"true"}>
+          <Item key={i} className={m.link === currentPath ? "active" : ""}>
             <Link to={m.link}>
               <ItemIcon>{m.icon}</ItemIcon>
               {m.text}
@@ -30,24 +46,22 @@ function PcNavigation({ menu }: TProps) {
 
 const Sider = styled.div`
   height: 100%;
-  padding: 24px;
   border-right: 1px solid ${({ theme }) => theme.colors.border};
-  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 const Nav = styled.div`
-  > *:last-child {
-    padding-top: 24px;
-  }
+  padding: 24px 0;
 `;
 
 const Item = styled.div`
   cursor: pointer;
-  padding: 8px 0;
+  padding: 16px 24px;
   color: ${({ theme }) => theme.colors.secondaryText};
 
+  &.active,
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.border};
   }
 `;
 
@@ -59,6 +73,7 @@ const ItemIcon = styled.div`
 const Footer = styled.div`
   position: absolute;
   bottom: 24px;
+  left: 24px;
 `;
 
 PcNavigation.defaultProps = {

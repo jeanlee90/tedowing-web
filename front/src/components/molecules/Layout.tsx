@@ -9,7 +9,8 @@ interface TProps {
 }
 
 function Layout({ mobile, header, navigation, children }: TProps) {
-  const NavWrapper = mobile ? MobileNav : PcNav;
+  // const NavWrapper = mobile ? MobileNav : PcNav;
+  const NavWrapper = PcNav;
 
   return (
     <SLayout>

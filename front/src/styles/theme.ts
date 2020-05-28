@@ -83,15 +83,15 @@ const colors = {
   primaryLight: "#fc5248",
 
   warning: "#ffd300",
-  success: "#437BFE",
+  success: "#3ea6ff",
 
-  title: "#333",
-  text: "#333",
-  secondaryText: "#666",
+  title: "#fff",
+  text: "#ebebeb",
+  secondaryText: "#a6a6a6",
   disabled: "#bfbfbf",
 
-  border: "#e0e0e0",
-  background: "#f0f0f0",
+  border: "#363636",
+  background: "#000",
 
   google: "#ea4335",
   facebook: "#3b5998",

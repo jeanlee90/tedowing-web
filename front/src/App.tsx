@@ -3,6 +3,7 @@ import * as routes from "lib/variables/routes";
 import { StoreProvider as Provider } from "stores";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import AppContainer from "components/organisms/AppContainer";
+import PageLoader from "components/atoms/PageLoader";
 import NotFound from "components/NotFound";
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
     <Provider>
       <BrowserRouter>
         <AppContainer>
-          <Suspense fallback={"loading..."}>
+          <Suspense fallback={<PageLoader />}>
             <Switch>
               {Object.values(routes).map((route, key) => {
                 const { component, exact, path } = route;

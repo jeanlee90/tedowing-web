@@ -57,12 +57,13 @@ const HomeTBWrapper = styled.div`
   left: 25%;
 
   ${({ theme }) => theme.media.tablet(`left: 10%;`)}
+  ${({ theme }) => theme.media.ipad(`left: 10%;`)}
   ${({ theme }) => theme.media.mobile(`left: 7%`)}
 `;
 
 const HomeTitle = styled.div`
   padding-bottom: 24px;
-  color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 const HomeTitleSub = styled.div`

@@ -99,7 +99,7 @@ const ScriptCard = styled.div.attrs(() => ({ role: "button" }))`
   }
 
   &.active {
-    background-color: ${({ theme }) => theme.colors.text};
+    background-color: ${({ theme }) => theme.colors.border};
 
     &:before {
       content: "";

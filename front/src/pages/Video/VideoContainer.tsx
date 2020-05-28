@@ -18,16 +18,11 @@ function VideoContainer() {
   const { language: userLang } = loginStore.getUserInfo();
   const { query } = useRouter();
   const { videoId } = query;
-  const themeClass = "theme-bk";
   const videoNode = React.useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const info = store.getInfo();
     if (isEmpty(info) || info.videoId !== +videoId) store.getVideo(videoId);
-
-    // theme - black
-    document.body.classList.add(themeClass);
-    return () => document.body.classList.remove(themeClass);
   }, []);
 
   const handleChangeTime = (time: number) => {
@@ -42,8 +37,6 @@ function VideoContainer() {
 
   return useObserver(() => {
     const info = store.getInfo();
-    if (store.loading || isEmpty(info)) return <div>LOADING</div>;
-
     const langSwitch = store.getLangSwitch();
     const streamProps = pick(info, ["videoMedium", "thumbnail"]);
     const languageProps = { langs: langSwitch, userLang, onToggle: handleToggleLang };
@@ -51,6 +44,7 @@ function VideoContainer() {
 
     return (
       <VideoLayout
+        loading={store.loading}
         stream={<VideoStream {...streamProps} videoNode={videoNode} onAfterChangeTime={store.setCurrentCaption} />}
         script={
           <VideoScript

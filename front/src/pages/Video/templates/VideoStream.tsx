@@ -16,9 +16,11 @@ function VideoStream({ thumbnail, videoMedium, videoNode, onAfterChangeTime }: T
 
   return (
     <PlayerWrapper>
-      <BackButton className="btn-back" onClick={() => history.goBack()}>
-        <FontAwesomeIcon icon={faArrowLeft} />
-      </BackButton>
+      <BackButtonWrapper className="btn-back">
+        <BackButton onClick={() => history.goBack()}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </BackButton>
+      </BackButtonWrapper>
       <Player
         controls
         poster={thumbnail}
@@ -41,19 +43,27 @@ const PlayerWrapper = styled.div`
 
   &:hover .btn-back {
     opacity: 1;
-    pointer-events: initial;
   }
 `;
 
-const BackButton = styled.span.attrs(() => ({ role: "button" }))`
+const BackButtonWrapper = styled.div`
   opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  text-align: left;
+  background: linear-gradient(180deg, black, transparent);
+  z-index: 1;
+  transition: all 0.5s ease 0s;
+`;
+
+const BackButton = styled.span.attrs(() => ({ role: "button" }))`
+  padding-top: 18px;
+  padding-left: 32px;
   font-size: 40px;
   position: absolute;
-  left: 32px;
-  top: 18px;
-  z-index: 1;
-
-  transition: all 0.5s ease 0s;
 `;
 
 export default VideoStream;

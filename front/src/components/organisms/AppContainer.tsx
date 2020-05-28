@@ -11,7 +11,7 @@ import MobileHeader from "components/molecules/MobileHeader";
 import PcNavigation from "components/molecules/PcNavigation";
 import MobileNavigation from "components/molecules/MobileNavigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStream, faHistory } from "@fortawesome/free-solid-svg-icons";
+import { faStream } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 
 interface TProps {
@@ -40,6 +40,7 @@ function AppContainer({ children }: TProps) {
     const pathArr = path.split("/");
     return pathArr[1] + (pathArr[2] || "");
   };
+
   const checkAuth = useCallback(async () => {
     const isLoggedIn = await loginStore.checkLogin();
     const { authority } = Object.values(routes).find(r => getMainPath(r.path) === getMainPath(router.pathname)) || {};
@@ -59,8 +60,10 @@ function AppContainer({ children }: TProps) {
 
   // Components by device
   const mobile = isMobile();
-  const header = mobile ? <MobileHeader>test</MobileHeader> : <PcHeader email={email} onLogout={handleLogout} />;
-  const navigation = mobile ? <MobileNavigation menu={menu} /> : <PcNavigation menu={menu} />;
+  // const header = mobile ? <MobileHeader>test</MobileHeader> : <PcHeader email={email} onLogout={handleLogout} />;
+  const header = <PcHeader email={email} onLogout={handleLogout} />;
+  // const navigation = mobile ? <MobileNavigation menu={menu} /> : <PcNavigation menu={menu} />;
+  const navigation = <PcNavigation menu={menu} />;
 
   // Main, Video page
   const { match } = router;
