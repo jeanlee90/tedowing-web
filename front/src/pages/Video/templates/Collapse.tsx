@@ -77,7 +77,7 @@ const CollapseContent = styled.div`
 
 const CollapseChildren = styled.div`
   padding: 12px 12px 16px 12px;
-  border-top: 1px solid ${({ theme }) => theme.colors.text};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 export default Collapse;

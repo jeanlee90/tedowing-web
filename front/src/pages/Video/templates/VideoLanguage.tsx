@@ -27,7 +27,7 @@ function VideoLanguage({ langs, userLang, onToggle }: TProps) {
 
 const SVideoLanguage = styled.div`
   padding: 8px 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.text};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const LangButton = styled.div.attrs(() => ({ role: "button" }))`

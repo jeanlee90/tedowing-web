@@ -59,9 +59,9 @@ const SInputBtn = styled.div`
 const SInput = styled.input`
   box-sizing: border-box;
   width: 100%;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-size: ${({ theme }) => theme.fontSizes.text};
-  border: 1px solid ${({ theme }) => `${theme.colors.border}`};
+  border: 1px solid ${({ theme }) => `${theme.colors.text}`};
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.disabled};

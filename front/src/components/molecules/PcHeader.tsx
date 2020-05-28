@@ -25,6 +25,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.secondaryBackground};
 `;
 
 const UserInfo = styled.div`

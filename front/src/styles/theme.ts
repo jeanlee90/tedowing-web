@@ -94,6 +94,7 @@ const colors = {
 
   border: "#363636",
   background: "#000",
+  secondaryBackground: "#1a1a1a",
 
   google: "#ea4335",
   facebook: "#3b5998",
