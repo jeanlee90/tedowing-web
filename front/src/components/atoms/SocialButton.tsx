@@ -49,7 +49,7 @@ const SIcon = styled.div`
 const SText = styled.div`
   flex: 1;
   text-align: center;
-  color: ${({ theme }) => theme.colors.secondaryText};
+  color: ${({ theme }) => theme.colors.blackText};
   font-size: ${({ theme }: TStyled) => theme.fontSizes.text};
 `;
 

@@ -2,19 +2,20 @@ import React from "react";
 import styled from "styles/theme-components";
 
 interface TProps {
+  loading: boolean;
   stream: React.ReactNode;
   script: React.ReactNode;
   caption: React.ReactNode;
 }
 
-function VideoLayout({ stream, script, caption }: TProps) {
+function VideoLayout({ loading, stream, script, caption }: TProps) {
   return (
     <SVideoLayout>
       <SVideoRow>
-        <StreamWrapper>{stream}</StreamWrapper>
-        <ScriptWrapper>{script}</ScriptWrapper>
+        <StreamWrapper>{!loading && stream}</StreamWrapper>
+        <ScriptWrapper>{!loading && script}</ScriptWrapper>
       </SVideoRow>
-      <CaptionWrapper>{caption}</CaptionWrapper>
+      <CaptionWrapper>{!loading && caption}</CaptionWrapper>
     </SVideoLayout>
   );
 }
@@ -42,12 +43,12 @@ const StreamWrapper = styled.div`
 const ScriptWrapper = styled.div`
   width: 400px;
   height: 100%;
-  border-left: 1px solid ${({ theme }) => theme.colors.text};
+  border-left: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const CaptionWrapper = styled.div`
-  min-height: ${({ theme }) => theme.layoutSizes.videoCaption};
-  border-top: 1px solid ${({ theme }) => theme.colors.text};
+  height: ${({ theme }) => theme.layoutSizes.videoCaption};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 export default VideoLayout;

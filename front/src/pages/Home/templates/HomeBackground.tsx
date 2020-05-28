@@ -29,12 +29,14 @@ const BgImage = styled.div`
 
 const BgCopyright = styled.div`
   position: absolute;
-  left: 24px;
+  right: 24px;
   bottom: 24px;
   color: ${({ theme }) => theme.colors.disabled};
   font-size: ${({ theme }) => theme.fontSizes.sub};
 
-  ${({ theme }) => theme.media.desktop("left: initial; right: 24px;")};
+  ${({ theme }) => theme.media.tablet("left: 10%; right: initial;")};
+  ${({ theme }) => theme.media.ipad("left: 10%; right: initial;")};
+  ${({ theme }) => theme.media.mobile("left: 7%; right: initial;")};
 `;
 
 export default HomeBackground;

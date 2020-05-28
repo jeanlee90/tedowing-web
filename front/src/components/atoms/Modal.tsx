@@ -27,7 +27,7 @@ function Modal({ className, visible, title, closable, children, keyboard, maskCl
   const escPress = useKeyPress("Escape");
   useEffect(() => {
     if (keyboard && escPress) handleClose();
-  }, [escPress, keyboard]);
+  }, [escPress, keyboard, handleClose]);
 
   // block scrolling
   useEffect(() => {
@@ -100,6 +100,7 @@ const ModalInner = styled.div`
   margin: 0 auto;
   padding: 16px 18px;
   outline: 0;
+  color: ${({ theme }) => theme.colors.blackText};
 
   // size
   width: 90%;

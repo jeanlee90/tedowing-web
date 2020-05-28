@@ -11,9 +11,8 @@ import MobileHeader from "components/molecules/MobileHeader";
 import PcNavigation from "components/molecules/PcNavigation";
 import MobileNavigation from "components/molecules/MobileNavigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStream, faHistory } from "@fortawesome/free-solid-svg-icons";
+import { faStream } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
-import { useRouteMatch } from "react-router-dom";
 
 interface TProps {
   children: React.ReactNode;
@@ -27,7 +26,7 @@ export interface TMenu {
 
 const menu: TMenu[] = [
   { text: "My Videos", link: routes.MY_VIDEOS.path, icon: <FontAwesomeIcon icon={faStream} /> },
-  { text: "Recents", link: "/recents/my", icon: <FontAwesomeIcon icon={faHistory} /> },
+  // { text: "Recents", link: "/recents/my", icon: <FontAwesomeIcon icon={faHistory} /> },
   { text: "Contact Support", link: "/support", icon: <FontAwesomeIcon icon={faQuestionCircle} /> },
 ];
 
@@ -41,17 +40,18 @@ function AppContainer({ children }: TProps) {
     const pathArr = path.split("/");
     return pathArr[1] + (pathArr[2] || "");
   };
+
   const checkAuth = useCallback(async () => {
     const isLoggedIn = await loginStore.checkLogin();
     const { authority } = Object.values(routes).find(r => getMainPath(r.path) === getMainPath(router.pathname)) || {};
 
     // 로그인 회원용 페이지
     if (authority && !isLoggedIn) return router.push(routes.HOME.path);
-  }, []);
+  }, [loginStore, router]);
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   const handleLogout = async () => {
     await loginStore.logout();
@@ -60,8 +60,10 @@ function AppContainer({ children }: TProps) {
 
   // Components by device
   const mobile = isMobile();
-  const header = mobile ? <MobileHeader>test</MobileHeader> : <PcHeader email={email} onLogout={handleLogout} />;
-  const navigation = mobile ? <MobileNavigation menu={menu} /> : <PcNavigation menu={menu} />;
+  // const header = mobile ? <MobileHeader>test</MobileHeader> : <PcHeader email={email} onLogout={handleLogout} />;
+  const header = <PcHeader email={email} onLogout={handleLogout} />;
+  // const navigation = mobile ? <MobileNavigation menu={menu} /> : <PcNavigation menu={menu} />;
+  const navigation = <PcNavigation menu={menu} />;
 
   // Main, Video page
   const { match } = router;

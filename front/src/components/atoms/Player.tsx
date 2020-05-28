@@ -6,28 +6,26 @@ import styled from "styles/theme-components";
 import "video.js/dist/video-js.css";
 import "styles/player.custom.css";
 
-type TChangeFn = (currentTime: number) => void;
+export type TChangeCurrentTimeFn = (currentTime: number) => void;
 
 type TProps = videojs.PlayerOptions & {
-  onAfterChangeTime?: TChangeFn;
+  onAfterChangeTime?: TChangeCurrentTimeFn;
 };
 
 const Player = forwardRef<HTMLVideoElement, TProps>(({ onAfterChangeTime, ...props }, ref) => {
-  let player: videojs.Player | null = null;
-  let refreshIntervalChange: number = 0;
-
-  const clearIntervalChange = () => {
-    if (refreshIntervalChange) {
-      clearInterval(refreshIntervalChange);
-      refreshIntervalChange = 0;
-    }
-  };
-
   useEffect(() => {
     if (!ref) return;
 
+    let refreshIntervalChange: number = 0;
+    const clearIntervalChange = () => {
+      if (refreshIntervalChange) {
+        clearInterval(refreshIntervalChange);
+        refreshIntervalChange = 0;
+      }
+    };
+
     const videoRef = ref as MutableRefObject<HTMLVideoElement>;
-    player = videojs(videoRef.current, props).ready(function (this: videojs.Player) {
+    const player = videojs(videoRef.current, props, function (this: videojs.Player) {
       // set interval
       this.on("play", function (_player: videojs.Player) {
         const curNode = videoRef.current;

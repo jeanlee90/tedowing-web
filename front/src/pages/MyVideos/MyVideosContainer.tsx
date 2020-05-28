@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { isMobile } from "lib/utils/device";
 import { useObserver } from "mobx-react-lite";
-import MyVideosTop from "./templates/MyVideosTop";
 import PcVideoCard from "./templates/PcVideoCard";
 import NewVideoButton from "./templates/NewVideoButton";
 import VideoCardList from "./templates/VideoCardList";
@@ -21,14 +20,12 @@ function MyVideosContainer() {
 
   useEffect(() => {
     if (store.getList().length === 0 || history.action === "PUSH") store.getMyVideos();
-  }, []);
+  }, [store, history.action]);
 
   const VideoCard = isMobile() ? PcVideoCard : PcVideoCard;
   return useObserver(() => (
     <>
-      <MyVideosTop>
-        <NewVideoButton adding={store.adding} onClick={handleClickNewVideo} />
-      </MyVideosTop>
+      <NewVideoButton adding={store.adding} onClick={handleClickNewVideo} />
       <VideoCardList loading={store.loading}>
         {store.list.map(video => (
           <VideoCard {...video} key={video.videoId} />

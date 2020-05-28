@@ -24,8 +24,8 @@ const Header = styled.div`
   padding: 0 24px;
   display: flex;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.secondaryBackground};
 `;
 
 const UserInfo = styled.div`

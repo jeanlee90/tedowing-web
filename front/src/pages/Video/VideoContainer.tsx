@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import { useStore } from "stores";
+import pick from "lodash/pick";
 import isEmpty from "lodash/isEmpty";
 import useRouter from "lib/hooks/useRouter";
 import { useObserver } from "mobx-react-lite";
 import { TLangSwitch } from "stores/videoStore";
 import VideoLayout from "./templates/VideoLayout";
+import VideoStream from "./templates/VideoStream";
 import VideoScript from "./templates/VideoScript";
 import VideoCaption from "./templates/VideoCaption";
 import VideoLanguage from "./templates/VideoLanguage";
-import Player from "components/atoms/Player";
 
 export type TToggleLang = (lang: keyof TLangSwitch) => void;
 
@@ -17,16 +18,11 @@ function VideoContainer() {
   const { language: userLang } = loginStore.getUserInfo();
   const { query } = useRouter();
   const { videoId } = query;
-  const themeClass = "theme-bk";
   const videoNode = React.useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const info = store.getInfo();
-    if (isEmpty(info) || info.videoId != videoId) store.getVideo(videoId);
-
-    // theme - black
-    document.body.classList.add(themeClass);
-    return () => document.body.classList.remove(themeClass);
+    if (isEmpty(info) || info.videoId !== +videoId) store.getVideo(videoId);
   }, []);
 
   const handleChangeTime = (time: number) => {
@@ -42,41 +38,24 @@ function VideoContainer() {
   return useObserver(() => {
     const info = store.getInfo();
     const langSwitch = store.getLangSwitch();
-    const { title, description, author, authorPhoto, script, videoMedium, thumbnail } = info;
+    const streamProps = pick(info, ["videoMedium", "thumbnail"]);
     const languageProps = { langs: langSwitch, userLang, onToggle: handleToggleLang };
-    const captionProps = { langSwitch, caption: script[store.currentCaptionTime] };
-    const scriptProps = {
-      title,
-      description,
-      author,
-      authorPhoto,
-      script,
-      langSwitch,
-      currentTime: store.currentCaptionTime,
-      onClickScript: handleChangeTime,
-      language: <VideoLanguage {...languageProps} />,
-    };
+    const scriptProps = pick(info, ["title", "description", "author", "authorPhoto", "script", "scriptTimes"]);
 
     return (
       <VideoLayout
-        stream={
-          videoMedium && (
-            <Player
-              controls
-              poster={thumbnail}
-              sources={[
-                {
-                  src: videoMedium,
-                  type: "video/mp4",
-                },
-              ]}
-              ref={videoNode}
-              onAfterChangeTime={store.setCurrentCaption}
-            />
-          )
+        loading={store.loading}
+        stream={<VideoStream {...streamProps} videoNode={videoNode} onAfterChangeTime={store.setCurrentCaption} />}
+        script={
+          <VideoScript
+            {...scriptProps}
+            langSwitch={langSwitch}
+            currentTime={store.currentCaptionTime}
+            language={<VideoLanguage {...languageProps} />}
+            onClickScript={handleChangeTime}
+          />
         }
-        script={<VideoScript {...scriptProps} />}
-        caption={<VideoCaption {...captionProps} />}
+        caption={<VideoCaption langSwitch={langSwitch} caption={info.script?.[store.currentCaptionTime]} />}
       />
     );
   });

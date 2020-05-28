@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styles/theme-components";
 import { TMyVideo } from "stores/myVideosStore";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
+// import { faHeart } from "@fortawesome/free-regular-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 
 type TProps = Partial<TMyVideo>;
 
@@ -14,18 +14,19 @@ function PcVideoCard({ videoId, title, author, thumbnail, duration, isFavorite }
   return (
     <VideoCard>
       <Link to={`/videos/my/${videoId}`}>
-        <VideoThumb thumbnail={thumbnail} />
-        <VideoInfo>
-          <VideoTitle>{title}</VideoTitle>
-          <VideoAuthor>{author}</VideoAuthor>
+        <VideoThumb thumbnail={thumbnail}>
           {duration && (
             <VideoDuration>
               {("0" + arrDur[0]).slice(-2)}:{("0" + arrDur[1]).slice(-2)}
             </VideoDuration>
           )}
-          <VideoFavorite>
+        </VideoThumb>
+        <VideoInfo>
+          <VideoTitle>{title}</VideoTitle>
+          <VideoAuthor>{author}</VideoAuthor>
+          {/* <VideoFavorite>
             <FontAwesomeIcon icon={isFavorite ? faSolidHeart : faHeart} />
-          </VideoFavorite>
+          </VideoFavorite> */}
         </VideoInfo>
       </Link>
     </VideoCard>
@@ -35,12 +36,13 @@ function PcVideoCard({ videoId, title, author, thumbnail, duration, isFavorite }
 const VideoCard = styled.div`
   display: inline-block;
   margin: 1%;
-  border-radius: 3px;
   overflow: hidden;
 
+  ${({ theme }) => theme.media.widescreen(` width: 23%;`)};
   ${({ theme }) => theme.media.desktop(` width: 31%;`)};
   ${({ theme }) => theme.media.tablet(`width: 31%;`)};
   ${({ theme }) => theme.media.ipad(`width: 48%;`)};
+  ${({ theme }) => theme.media.mobile(`width: 100%;`)};
 
   // animation
   transition-duration: 0.2s;
@@ -53,6 +55,8 @@ const VideoCard = styled.div`
 `;
 
 const VideoThumb = styled.div<TProps>`
+  border-radius: 3px;
+  position: relative;
   padding-bottom: 50%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -61,17 +65,18 @@ const VideoThumb = styled.div<TProps>`
 `;
 
 const VideoInfo = styled.div`
-  padding: 12px 12px 16px 12px;
-  background: ${({ theme }) => theme.colors.white};
+  padding: 16px 4px;
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
 const VideoTitle = styled.div`
   font-weight: 700;
   line-height: 1.4;
-  height: 39px;
+  height: 40px;
   margin-bottom: 6px;
   overflow: hidden;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.title};
 
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -90,7 +95,12 @@ const VideoDuration = styled.span`
   padding: 2px 4px;
   font-size: 10px;
   font-weight: 700;
+  color: ${({ theme }) => theme.colors.text};
   background-color: ${({ theme }) => theme.colors.background};
+
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
 `;
 
 const VideoFavorite = styled.span`

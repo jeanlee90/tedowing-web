@@ -39,7 +39,7 @@ const STitle = styled.div`
     if (type === Types.warning) return theme.colors.warning;
     if (type === Types.secondary) return theme.colors.secondaryText;
     if (type === Types.inverted || mark) return theme.colors.white;
-    return theme.colors.text;
+    return "inherit";
   }};
 
   // underline

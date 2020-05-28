@@ -86,8 +86,9 @@ const DropdownOptions = styled.ul`
   padding: 4px 0;
   margin-top: 7px;
   border-radius: 2px;
-  background-color: ${({ theme }) => theme.colors.white};
-  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.background};
+  /* box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05); */
   z-index: 1050;
 `;
 

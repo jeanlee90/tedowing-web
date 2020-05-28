@@ -49,10 +49,7 @@ export interface TVideo {
 export default function videoStore() {
   return {
     loading: true,
-    info: {
-      script: {},
-      scriptTimes: [0],
-    } as TVideo,
+    info: {} as TVideo,
     currentCaptionTime: 0,
     langSwitch: {
       en: true,
@@ -76,11 +73,12 @@ export default function videoStore() {
     async getVideo(videoId: number): Promise<boolean> {
       this.loading = true;
       const { error, result = {} } = await request.get(`/videos/${videoId}`);
-      this.loading = false;
 
       if (error) return false;
-      if (result) this.info = result;
+      if (result) this.info = result || {};
 
+      // [중요] info 값이 바뀌기 전까지는 loading이 true 여야함. (video 업데이트를 위해)
+      this.loading = false;
       return true;
     },
   };
