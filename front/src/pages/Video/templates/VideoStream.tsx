@@ -19,7 +19,18 @@ function VideoStream({ thumbnail, videoMedium, videoNode, onAfterChangeTime }: T
       <BackButton className="btn-back" onClick={() => history.goBack()}>
         <FontAwesomeIcon icon={faArrowLeft} />
       </BackButton>
-      <Player controls poster={thumbnail} src={videoMedium} ref={videoNode} onAfterChangeTime={onAfterChangeTime} />
+      <Player
+        controls
+        poster={thumbnail}
+        sources={[
+          {
+            src: videoMedium,
+            type: "video/mp4",
+          },
+        ]}
+        ref={videoNode}
+        onAfterChangeTime={onAfterChangeTime}
+      />
     </PlayerWrapper>
   );
 }

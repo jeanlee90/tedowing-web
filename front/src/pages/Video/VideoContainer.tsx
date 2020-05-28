@@ -48,7 +48,6 @@ function VideoContainer() {
     const streamProps = pick(info, ["videoMedium", "thumbnail"]);
     const languageProps = { langs: langSwitch, userLang, onToggle: handleToggleLang };
     const scriptProps = pick(info, ["title", "description", "author", "authorPhoto", "script", "scriptTimes"]);
-    const captionProps = { langSwitch, caption: info.script?.[store.currentCaptionTime] };
 
     return (
       <VideoLayout

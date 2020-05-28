@@ -47,8 +47,6 @@ const Player = forwardRef<HTMLVideoElement, TProps>(({ onAfterChangeTime, ...pro
       });
     });
 
-    player.load();
-
     return () => {
       if (player) player.dispose();
       if (refreshIntervalChange) clearIntervalChange();
