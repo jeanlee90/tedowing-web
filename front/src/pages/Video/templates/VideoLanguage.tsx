@@ -16,10 +16,10 @@ function VideoLanguage({ langs, userLang, onToggle }: TProps) {
   return (
     <SVideoLanguage>
       <LangButton className={makeActive(langs.en)} onClick={() => onToggle("en")}>
-        {langCodes.en.nativeName}
+        {langCodes.en?.nativeName}
       </LangButton>
       <LangButton className={makeActive(langs.user)} onClick={() => onToggle("user")}>
-        {langCodes[userLang].nativeName}
+        {langCodes[userLang]?.nativeName}
       </LangButton>
     </SVideoLanguage>
   );

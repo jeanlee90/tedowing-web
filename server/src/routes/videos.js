@@ -60,7 +60,9 @@ export const getVideo = async (req, res, next) => {
       });
     }
 
-    const scriptTimes = Object.keys(script).map(Number);
+    const scriptTimes = Object.keys(script)
+      .map(Number)
+      .sort((a, b) => a - b);
     const result = { ...video.dataValues, title, author, description, script, scriptTimes };
     delete result.createdAt;
     delete result.updatedAt;

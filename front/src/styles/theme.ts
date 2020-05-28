@@ -6,6 +6,7 @@ interface Media {
   ipad: (...args: BackQuoteArgs) => CSSProp | undefined;
   tablet: (...args: BackQuoteArgs) => CSSProp | undefined;
   desktop: (...args: BackQuoteArgs) => CSSProp | undefined;
+  widescreen: (...args: BackQuoteArgs) => CSSProp | undefined;
 }
 
 // responsive
@@ -13,7 +14,8 @@ const sizes: { [key: string]: number } = {
   mobile: 320,
   ipad: 768,
   tablet: 991,
-  desktop: 1024,
+  desktop: 1200,
+  widescreen: 1600,
 };
 
 const media: Media = {
@@ -21,14 +23,23 @@ const media: Media = {
   ipad: (...args: BackQuoteArgs) => undefined,
   tablet: (...args: BackQuoteArgs) => undefined,
   desktop: (...args: BackQuoteArgs) => undefined,
+  widescreen: (...args: BackQuoteArgs) => undefined,
 };
 
 Object.keys(sizes).reduce((acc: Media, label: string) => {
   switch (label) {
+    case "widescreen":
+      acc.widescreen = (...args: BackQuoteArgs) =>
+        css`
+          @media only screen and (min-width: ${sizes.widescreen}px) {
+            ${args}
+          }
+        `;
+      break;
     case "desktop":
       acc.desktop = (...args: BackQuoteArgs) =>
         css`
-          @media only screen and (min-width: ${sizes.desktop}px) {
+          @media only screen and (max-width: ${sizes.widescreen}px) and (min-width: ${sizes.desktop}px) {
             ${args}
           }
         `;

@@ -5,7 +5,7 @@ import Text, { Types } from "components/atoms/Text";
 import Collapse from "./Collapse";
 import Speaker from "./Speaker";
 
-type TProps = Pick<TVideo, "title" | "description" | "author" | "authorPhoto" | "script"> & {
+type TProps = Pick<TVideo, "title" | "description" | "author" | "authorPhoto" | "script" | "scriptTimes"> & {
   currentTime: number;
   langSwitch: TLangSwitch;
   language: React.ReactNode;
@@ -27,6 +27,7 @@ function VideoScript({
   author,
   authorPhoto,
   script,
+  scriptTimes,
   language,
   langSwitch,
   currentTime,
@@ -50,7 +51,7 @@ function VideoScript({
       </Collapse>
       {language}
       <ScriptList ref={scrollRef}>
-        {Object.keys(script).map(time => {
+        {scriptTimes.map(time => {
           const sTime = +time;
           const { text, trans } = script[sTime];
           const isShowEn = langSwitch.en && text;

@@ -27,7 +27,7 @@ function Modal({ className, visible, title, closable, children, keyboard, maskCl
   const escPress = useKeyPress("Escape");
   useEffect(() => {
     if (keyboard && escPress) handleClose();
-  }, [escPress, keyboard]);
+  }, [escPress, keyboard, handleClose]);
 
   // block scrolling
   useEffect(() => {

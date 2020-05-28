@@ -46,7 +46,7 @@ const ScriptWrapper = styled.div`
 `;
 
 const CaptionWrapper = styled.div`
-  min-height: ${({ theme }) => theme.layoutSizes.videoCaption};
+  height: ${({ theme }) => theme.layoutSizes.videoCaption};
   border-top: 1px solid ${({ theme }) => theme.colors.text};
 `;
 

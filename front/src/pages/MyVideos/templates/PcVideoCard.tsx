@@ -38,9 +38,11 @@ const VideoCard = styled.div`
   border-radius: 3px;
   overflow: hidden;
 
+  ${({ theme }) => theme.media.widescreen(` width: 23%;`)};
   ${({ theme }) => theme.media.desktop(` width: 31%;`)};
   ${({ theme }) => theme.media.tablet(`width: 31%;`)};
   ${({ theme }) => theme.media.ipad(`width: 48%;`)};
+  ${({ theme }) => theme.media.mobile(`width: 100%;`)};
 
   // animation
   transition-duration: 0.2s;

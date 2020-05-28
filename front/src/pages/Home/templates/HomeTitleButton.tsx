@@ -4,7 +4,6 @@ import styled from "styles/theme-components";
 import Logo from "components/atoms/Logo";
 import * as routes from "lib/variables/routes";
 import Modal from "components/atoms/Modal";
-import { baseUrl } from "lib/variables/settings";
 import Button, { Sizes } from "components/atoms/Button";
 import SocialButton, { Sns } from "components/atoms/SocialButton";
 
@@ -44,7 +43,7 @@ function HomeTitleButton({ isLoggedIn }: TProps) {
         }
         onClose={handleClose}
       >
-        <a href={`${baseUrl}/api/auth/google`}>
+        <a href="/api/auth/google">
           <SocialButton sns={Sns.google} />
         </a>
       </Modal>
@@ -55,8 +54,8 @@ function HomeTitleButton({ isLoggedIn }: TProps) {
 const HomeTBWrapper = styled.div`
   position: absolute;
   top: calc(50% - 150px);
+  left: 25%;
 
-  ${({ theme }) => theme.media.desktop(`left: 25%;`)}
   ${({ theme }) => theme.media.tablet(`left: 10%;`)}
   ${({ theme }) => theme.media.mobile(`left: 7%`)}
 `;

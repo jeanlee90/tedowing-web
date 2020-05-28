@@ -13,7 +13,6 @@ import MobileNavigation from "components/molecules/MobileNavigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStream, faHistory } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
-import { useRouteMatch } from "react-router-dom";
 
 interface TProps {
   children: React.ReactNode;
@@ -47,11 +46,11 @@ function AppContainer({ children }: TProps) {
 
     // 로그인 회원용 페이지
     if (authority && !isLoggedIn) return router.push(routes.HOME.path);
-  }, []);
+  }, [loginStore, router]);
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   const handleLogout = async () => {
     await loginStore.logout();

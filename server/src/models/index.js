@@ -1,4 +1,3 @@
-import path from "path";
 import Sequelize from "sequelize";
 import config from "../lib/variables/config";
 

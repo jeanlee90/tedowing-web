@@ -11,7 +11,7 @@ const { GOOGLE_SCOPE } = config;
 export const requestLoginByGoogle = () => passport.authenticate("google", { scope: GOOGLE_SCOPE });
 
 export const loginByGoogle = () =>
-  passport.authenticate("google", { successRedirect: "http://localhost:3000/videos/my", failureRedirect: "/" });
+  passport.authenticate("google", { successRedirect: `${config.BASE_URL}/videos/my`, failureRedirect: "/" });
 
 export const onLoginSuccess = async (profile, done) => {
   const { id: googleId, displayName, accessToken, email } = profile;

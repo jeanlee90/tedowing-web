@@ -6,7 +6,6 @@ export const getCurrentCaptionTime: TBinarySearch<number> = function (arr = [], 
   let start = 0;
   let end = arr.length - 1;
   let index = Math.floor((end - start) / 2) + start;
-  let result = -1;
   let value = -1;
 
   if (target > arr[arr.length - 1]) {
@@ -16,7 +15,6 @@ export const getCurrentCaptionTime: TBinarySearch<number> = function (arr = [], 
       value = arr[index];
 
       if (value === target) {
-        result = index;
         break;
       } else if (target < value) {
         end = index;
