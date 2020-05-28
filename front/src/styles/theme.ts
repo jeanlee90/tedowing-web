@@ -90,6 +90,8 @@ const colors = {
   secondaryText: "#a6a6a6",
   disabled: "#bfbfbf",
 
+  blackText: "#333",
+
   border: "#363636",
   background: "#000",
 

@@ -100,6 +100,7 @@ const ModalInner = styled.div`
   margin: 0 auto;
   padding: 16px 18px;
   outline: 0;
+  color: ${({ theme }) => theme.colors.blackText};
 
   // size
   width: 90%;
