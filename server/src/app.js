@@ -10,10 +10,6 @@ import setupPassport from "./middlewares/passport";
 import { defaultErrorHandler } from "./middlewares/ErrorHandler";
 import logger from "./lib/utils/logger";
 
-// NODE_ENV
-process.env.NODE_ENV =
-  process.env.NODE_ENV && process.env.NODE_ENV.trim().toLocaleLowerCase() === "production" ? "production" : "development";
-
 const app = express();
 const port = config.PORT || 4000;
 const router = express.Router();

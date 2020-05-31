@@ -1,4 +1,6 @@
-const BASE_URL = process.env.NODE_ENV === "production" ? "https://tedowing.jean-lee.com" : "http://localhost:4000";
+// const BASE_URL = process.env.NODE_ENV === "production" ? "https://tedowing.jean-lee.com" : "http://localhost:4000";
+const BASE_URL = process.env.NODE_ENV === "production" ? "http://tedowing.jean-lee.com:4000" : "http://localhost:4000";
+
 const config = {
   BASE_URL,
   PORT: 4000,
