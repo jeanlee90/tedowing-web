@@ -14,7 +14,9 @@
 <br/>
 <br/>
 <br/>
+
 ## 사용 기술
+
 - [Front-end] TypeScript, React(CSR), MobX(mobx-react-lite), styled-components
 - [Back-end] Node.js(Express), MySQL(Sequelize), Google OAuth 2.0, TED Crawling
 <br/>
